@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 625" role="img" aria-label="Classifier pipeline: description, attribute extraction, rules engine, class">
+  <rect width="1000" height="625" fill="#FFFFFF"/>
+  <g fill="none" stroke="#D3DADF" stroke-width="1">
+    <path d="M0 125H1000M0 250H1000M0 375H1000M0 500H1000M200 0V625M400 0V625M600 0V625M800 0V625"/>
+  </g>
+  <g font-family="'IBM Plex Mono',ui-monospace,Consolas,monospace" fill="#14212B">
+    <g stroke="#14212B" stroke-width="2.5" fill="#FFFFFF">
+      <rect x="60" y="70" width="400" height="110"/>
+      <rect x="60" y="258" width="400" height="110"/>
+      <rect x="60" y="446" width="400" height="110"/>
+    </g>
+    <g stroke="#14212B" stroke-width="2.5" fill="none">
+      <path d="M260 180V250M250 236l10 16 10-16M260 368V438M250 424l10 16 10-16M460 501H590M576 491l16 10-16 10"/>
+    </g>
+    <text x="84" y="112" font-size="17" fill="#56656F" letter-spacing="1.5">01 INPUT</text>
+    <text x="84" y="150" font-size="27" font-weight="600">Device description</text>
+    <text x="84" y="300" font-size="17" fill="#56656F" letter-spacing="1">02 LLM OR FORM · NEVER THE CLASS</text>
+    <text x="84" y="338" font-size="27" font-weight="600">Attributes only</text>
+    <text x="84" y="488" font-size="17" fill="#56656F" letter-spacing="1.5">03 RULES ENGINE</text>
+    <text x="84" y="526" font-size="27" font-weight="600">Annex VIII, rules 1–22</text>
+    <g font-family="Archivo,'Arial Narrow',Arial,sans-serif" font-weight="800" font-size="56">
+      <rect x="610" y="70" width="330" height="110" fill="#FFFFFF" stroke="#D3DADF" stroke-width="2"/>
+      <text x="640" y="146" fill="#9AA7B0">I</text>
+      <rect x="610" y="195" width="330" height="110" fill="#FFFFFF" stroke="#D3DADF" stroke-width="2"/>
+      <text x="640" y="271" fill="#9AA7B0">IIa</text>
+      <rect x="610" y="320" width="330" height="110" fill="#FFFFFF" stroke="#D3DADF" stroke-width="2"/>
+      <text x="640" y="396" fill="#9AA7B0">IIb</text>
+      <rect x="610" y="445" width="330" height="110" fill="#D2541E" stroke="#D2541E" stroke-width="2"/>
+      <text x="640" y="521" fill="#FFFFFF">III</text>
+    </g>
+    <text x="760" y="512" font-size="17" fill="#FFFFFF" letter-spacing="1.5">RULE 8</text>
+  </g>
+</svg>

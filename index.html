@@ -204,6 +204,7 @@ html{scroll-behavior:smooth}
       <li><a href="#top">Overview</a></li>
       <li><a href="#stent">Magnetic cerebral stent</a></li>
       <li><a href="#claw">Bird-of-prey gripper</a></li>
+      <li><a href="#mdr">MDR classifier (try it)</a></li>
       <li><a href="#reviews">Stent design reviews</a></li>
       <li><a href="#marlo">Marlo (side project)</a></li>
       <li><a href="#about">Background &amp; contact</a></li>
@@ -240,6 +241,10 @@ html{scroll-behavior:smooth}
       <a href="#claw">
         <div class="thumb"><img src="assets/render-grip.webp" alt="" loading="lazy" style="object-position:40% 50%"></div>
         <div><span class="num">Group build · 2025</span><h3>Bird-of-prey gripper</h3><p>Tendon-driven, 3D-printed claw with adjustable digit spread from 29° to 88°.</p></div>
+      </a>
+      <a href="#mdr">
+        <div class="thumb"><img src="assets/mdr-flow.svg" alt="" loading="lazy"></div>
+        <div><span class="num">Software · 2026 · Live demo</span><h3>EU MDR device classifier</h3><p>Describe a device, get its risk class, the rules behind it and the standards involved.</p></div>
       </a>
       <a href="#reviews">
         <div class="thumb"><img src="assets/essay-crosssection.webp" alt="" loading="lazy" style="object-position:62% 40%"></div>
@@ -482,6 +487,423 @@ html{scroll-behavior:smooth}
           </div>
         </div>
       </section>
+    </article>
+
+    <!-- ========== MDR CLASSIFIER ========== -->
+    <article id="mdr" class="sheet">
+      <style>
+        #mdr .mdr-modes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+        #mdr .mdr-modes button,#mdr .mdr-chips button{appearance:none;background:none;border:1px solid var(--line);color:var(--muted);font:500 14px var(--body);padding:7px 12px;cursor:pointer}
+        #mdr .mdr-modes button[aria-pressed="true"]{border-color:var(--cobalt);color:var(--ink);box-shadow:inset 0 -2px 0 var(--cobalt)}
+        #mdr .mdr-chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+        #mdr .mdr-chips button{font:400 12px var(--mono);padding:4px 10px;background:var(--chip);border-color:transparent;color:var(--ink);border-radius:3px}
+        #mdr .mdr-chips button:hover{border-color:var(--cobalt)}
+        #mdr label.mdr-l{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+        #mdr textarea,#mdr select{width:100%;font:400 15px var(--body);color:var(--ink);background:var(--sheet);border:1px solid var(--line);border-radius:0;padding:10px 12px}
+        #mdr textarea{min-height:120px;resize:vertical;line-height:1.5}
+        #mdr .mdr-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:12px}
+        #mdr .mdr-go{appearance:none;border:1px solid var(--cobalt);background:var(--cobalt);color:var(--sheet);font:600 15px var(--body);padding:9px 18px;cursor:pointer}
+        #mdr .mdr-go[disabled]{opacity:.55;cursor:progress}
+        #mdr .mdr-count,#mdr .mdr-file{font-family:var(--mono);font-size:12px;color:var(--muted)}
+        #mdr .mdr-q{margin:0 0 16px;max-width:36em}
+        #mdr fieldset{border:0;border-top:1px solid var(--line);margin:18px 0 0;padding:14px 0 0}
+        #mdr legend{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 8px 0 0}
+        #mdr .mdr-check{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;align-items:start;font-size:14.5px;line-height:1.4;margin:0 0 9px;cursor:pointer}
+        #mdr .mdr-check input{margin:3px 0 0;width:16px;height:16px;accent-color:var(--cobalt)}
+        #mdr .mdr-sub{margin:-2px 0 12px 28px;max-width:30em}
+        #mdr .mdr-out{border:1px solid var(--line);padding:20px;min-height:200px}
+        #mdr .mdr-out h4{margin-top:18px}
+        #mdr .mdr-class{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+        #mdr .mdr-class .v{font-family:var(--display);font-stretch:80%;font-weight:800;font-size:64px;line-height:1;color:var(--heat)}
+        #mdr .mdr-class .k{font-size:14px;color:var(--muted);max-width:22em}
+        #mdr .mdr-ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:14px 0 4px;font-family:var(--mono);font-size:12px;text-align:center}
+        #mdr .mdr-ladder span{border:1px solid var(--line);padding:4px 0;color:var(--muted)}
+        #mdr .mdr-ladder span.on{background:var(--heat);border-color:var(--heat);color:#fff}
+        #mdr .mdr-msg{font-size:14px;color:var(--muted);margin:0}
+        #mdr .mdr-warn{border-left:2px solid var(--heat);padding-left:12px;font-size:14px;margin:12px 0 0}
+        #mdr .spec td:first-child{width:24%}
+        #mdr .spec td:last-child{font-family:var(--body);font-size:14px}
+        #mdr .spec b{font-family:var(--mono);font-weight:500;font-size:12.5px}
+        #mdr details{margin-top:14px;font-size:14px}
+        #mdr summary{cursor:pointer;color:var(--cobalt)}
+        #mdr .mdr-link{appearance:none;background:none;border:0;padding:0;color:var(--cobalt);font:inherit;text-decoration:underline;cursor:pointer}
+      </style>
+      <header class="sheet-head">
+        <div>
+          <p class="kicker">Software project · Regulatory</p>
+          <h2>An EU MDR device classifier you can try</h2>
+          <p class="sub">Describe a medical device and it predicts the risk class under Regulation (EU) 2017/745, shows which Annex VIII rules fired, and lists the standards usually used to show conformity. A language model only reads the description into structured attributes. The class comes from a rules engine I wrote against the regulation text and tested against the official MDCG worked examples.</p>
+        </div>
+        <table class="tblock" aria-label="Project details">
+          <tr><td>Regulation</td><td>EU MDR 2017/745</td></tr>
+          <tr><td>Rules</td><td>Annex VIII, 1–22</td></tr>
+          <tr><td>Checked against</td><td>MDCG 2021-24</td></tr>
+          <tr><td>Stack</td><td>Python, FastAPI, JS</td></tr>
+          <tr><td>Status</td><td>Demo, not advice</td></tr>
+        </table>
+      </header>
+
+      <div class="lead">
+        <figure class="plate"><img src="assets/mdr-flow.svg" alt="Diagram: a device description is turned into attributes by a language model or a form, then a rules engine applies Annex VIII rules 1 to 22 and outputs a class from I to III" loading="lazy" style="aspect-ratio:16/10;object-fit:cover"></figure>
+        <div class="facts">
+          <div class="fact"><div class="v">22<small> rules</small></div><div class="k">Every Annex VIII classification rule, each with tests built from named MDCG example devices</div></div>
+          <div class="fact"><div class="v">0<small> guesses</small></div><div class="k">The language model never picks the class. It fills in attributes, and you can inspect and change them</div></div>
+          <div class="fact"><div class="v">6,000<small> devices</small></div><div class="k">Random devices run through both the Python engine and the copy in this page, with identical results required</div></div>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Classifier detail">
+        <button role="tab" id="t-r1" aria-controls="p-r1" aria-selected="true">Try it</button>
+        <button role="tab" id="t-r2" aria-controls="p-r2" aria-selected="false" tabindex="-1">How it works</button>
+        <button role="tab" id="t-r3" aria-controls="p-r3" aria-selected="false" tabindex="-1">What it can't do</button>
+      </div>
+
+      <section class="panel" role="tabpanel" id="p-r1" aria-labelledby="t-r1">
+        <div class="cols">
+          <div>
+            <div class="mdr-modes" role="group" aria-label="Input mode">
+              <button type="button" id="mdr-m-text" aria-pressed="true">Describe the device</button>
+              <button type="button" id="mdr-m-form" aria-pressed="false">Answer questions instead</button>
+            </div>
+
+            <div id="mdr-text">
+              <label class="mdr-l" for="mdr-desc">Device description</label>
+              <textarea id="mdr-desc" maxlength="2000" placeholder="What is it, where does it go in or on the body, for how long, and what does it do?"></textarea>
+              <div class="mdr-chips" id="mdr-ex-text" aria-label="Example descriptions"></div>
+              <div class="mdr-row">
+                <button type="button" class="mdr-go" id="mdr-run">Classify</button>
+                <label class="mdr-file">Optional photo or drawing <input type="file" id="mdr-img" accept="image/png,image/jpeg,image/webp"></label>
+                <span class="mdr-count" id="mdr-count">0 / 2000</span>
+              </div>
+              <p class="mdr-msg" style="margin-top:12px">Runs on a small server with a daily usage cap. If it's unavailable, the questions mode runs the same rules entirely in your browser.</p>
+            </div>
+
+            <div id="mdr-form" hidden>
+              <div class="mdr-chips" id="mdr-ex-form" aria-label="Example devices" style="margin:0 0 16px"></div>
+              <div id="mdr-questions"></div>
+              <p class="mdr-msg" style="margin-top:14px">Nothing leaves your browser in this mode. The result updates as you answer.</p>
+            </div>
+          </div>
+
+          <div>
+            <div class="mdr-out" id="mdr-out" aria-live="polite">
+              <p class="mdr-msg">The predicted class, the rules behind it and the relevant standards will appear here.</p>
+            </div>
+            <p class="note" style="font-size:14px">A learning and brainstorming aid, not regulatory advice. A real classification depends on the manufacturer's stated intended purpose and is confirmed with a notified body.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-r2" aria-labelledby="t-r2" hidden>
+        <div class="cols">
+          <div>
+            <h4>The model reads, the code decides</h4>
+            <p>Classification under the MDR is a legal test with a right answer for a given set of facts, so I didn't want a language model producing it. The model's job is narrow: read a description and fill in about 65 yes/no and multiple-choice attributes, such as how invasive the device is, how long it stays in the body and whether it is powered. Its output is forced into a fixed schema that has no field for a class.</p>
+            <p>A separate rules engine takes those attributes and applies all 22 rules. Where several rules apply, Annex VIII says the strictest one wins, so the engine evaluates every rule and reports the highest class along with every rule that fired.</p>
+            <p>The standards list comes from a third step that maps the device's attributes to the general safety and performance requirements in Annex I, for example ISO 10993 for anything in contact with tissue and IEC 60601 for powered devices.</p>
+          </div>
+          <div>
+            <h4>How I checked it</h4>
+            <table class="spec">
+              <tr><td>Source text</td><td>Annex VIII and Annex I from EUR-Lex, saved in the repository and quoted in each rule</td></tr>
+              <tr><td>Ground truth</td><td>Named example devices from MDCG 2021-24, the official classification guidance, for all 22 rules</td></tr>
+              <tr><td>Browser copy</td><td>Compared against the Python engine on 6,000 random devices in the test suite</td></tr>
+              <tr><td>Public server</td><td>Per-visitor rate limits, input size limits and a hard cap on model spend</td></tr>
+              <tr><td>If the model is off</td><td>Falls back to a keyword reader, then to the questions form</td></tr>
+            </table>
+            <p class="docs"><a href="https://github.com/SamLukaitis/medtech-classifier" target="_blank" rel="noopener">Source code <small>GitHub</small></a></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-r3" aria-labelledby="t-r3" hidden>
+        <div class="cols">
+          <div>
+            <h4>Where it stops</h4>
+            <ul class="plain">
+              <li>It classifies what you describe. The legal test is the manufacturer's intended purpose, and two similar devices with different claims can land in different classes.</li>
+              <li>It doesn't decide whether something is a medical device at all, and it doesn't cover in vitro diagnostics, which fall under a separate regulation.</li>
+              <li>Some rules turn on judgement, such as whether a hazard is "potentially hazardous" or how serious a software error could be. The tool flags these instead of hiding them.</li>
+              <li>The standards are the ones commonly used to show conformity. It doesn't check which editions are currently harmonised or pick device-specific parts.</li>
+              <li>The model can misread a description. That's why the attributes it extracted are shown and can be edited in the questions mode.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Why I built it</h4>
+            <p>I wanted to understand the classification rules properly, and writing them as code forces every clause to be read. It found gaps in my own first reading: four rules I had marked as ambiguous turned out to be settled by the MDCG guidance once I checked.</p>
+            <p>Treat the output as a starting point for a conversation with a regulatory specialist, in the same way you'd treat a first-pass hand calculation.</p>
+          </div>
+        </div>
+      </section>
+
+      <script src="assets/mdr-engine.js"></script>
+      <script>
+      (function(){
+        var API='https://mdr-api-production-0dc444d6.up.railway.app';
+        var E=window.MDREngine; if(!E) return;
+        var $=function(id){return document.getElementById(id)};
+        var out=$('mdr-out'), state={}, mode='text';
+        function el(tag,text,cls){var n=document.createElement(tag); if(text!=null) n.textContent=text; if(cls) n.className=cls; return n}
+
+        // ---- questions (each maps straight onto engine attributes) ----
+        var CLS=[['','Not connected / not applicable'],['I','Class I'],['IIa','Class IIa'],['IIb','Class IIb'],['III','Class III']];
+        function inv(v){return function(d){return d.invasiveness===v}}
+        function surg(d){return d.invasiveness==='surgically_invasive'}
+        function nonInv(d){return d.invasiveness==='non_invasive'}
+        function at(v){return function(d){return d.active_type===v}}
+        var Q=[
+          {sel:'contact',label:'How does it contact the body?',opts:[['non','Not invasive (on the skin, or no body contact)'],['orifice','Enters through a natural opening such as the mouth, nose, ear or a stoma'],['surgical','Surgically invasive (goes through the skin or is used in surgery)'],['implant','Implant (stays in the body after the procedure)']]},
+          {sel:'duration',label:'How long is it in continuous use?',show:function(d){return !nonInv(d)&&!d.is_implantable},opts:[['transient','Under 60 minutes'],['short_term','60 minutes to 30 days'],['long_term','More than 30 days']]},
+          {sel:'body_orifice_site',label:'Which opening?',show:inv('invasive_body_orifice'),opts:[['other_orifice','Somewhere else (e.g. urethra, rectum, vagina, stoma)'],['oral_cavity_to_pharynx','Mouth, as far as the throat'],['ear_canal_to_eardrum','Ear canal, up to the eardrum'],['nasal_cavity','Nasal cavity']]},
+          {sel:'power',label:'Is it powered or software?',opts:[['none','Not powered'],['therapeutic','Powered, treats or supports the patient'],['diagnostic_monitoring','Powered, diagnoses or monitors'],['other_active','Powered, but neither (e.g. a hospital bed)'],['software','Standalone software']]},
+
+          {group:'Non-invasive use',show:nonInv,items:[
+            {k:'contacts_injured_skin_or_mucous_membrane',t:'Touches injured skin or a wound',sub:{k:'wound_contact_purpose',opts:[['other','Something else'],['mechanical_barrier_compression_or_absorption','Barrier, compression or absorbing exudate'],['manage_microenvironment','Manages the wound micro-environment'],['breached_dermis_secondary_intent_healing','For deep wounds that heal by secondary intent']]}},
+            {k:'channels_or_stores_for_infusion_administration_or_introduction',t:'Channels or stores liquids, gases, blood or tissue that will go into the body',sub:{k:'storage_target',opts:[['other','Other liquids or gases'],['blood_or_other_body_liquids','Blood or other body liquids'],['organs_cells_tissues','Organs, cells or tissues'],['blood_bags','It is a blood bag']]}},
+            {k:'modifies_biological_or_chemical_composition',t:'Changes the composition of blood, body liquids or cells before they go back into the body',sub:{k:'modification_treatment_type',opts:[['other','By another method'],['filtration_centrifugation_gas_or_heat_exchange','By filtration, centrifugation, or gas or heat exchange']]}},
+            {k:'in_vitro_direct_contact_with_cells_tissues_organs_or_embryos',t:'A substance used in vitro with human cells, organs or embryos (e.g. IVF media)'}
+          ]},
+          {group:'Body-opening use',show:inv('invasive_body_orifice'),items:[
+            {k:'liable_to_be_absorbed_by_mucous_membrane',t:'Liable to be absorbed by the mucous membrane'},
+            {k:'administers_medicinal_product_by_inhalation',t:'Delivers medicines by inhalation'},
+            {k:'inhalation_essential_impact_or_life_threatening',t:'Its action is essential to the medicine working safely, or it treats a life-threatening condition',show:function(d){return d.administers_medicinal_product_by_inhalation}}
+          ]},
+          {group:'Connection to powered equipment',show:function(d){return !surg(d)},items:[
+            {sub:{k:'connected_to_active_device_class',label:'Class of the powered device it connects to',opts:CLS,nullable:true}}
+          ]},
+          {group:'Surgical use and implants',show:surg,items:[
+            {k:'contacts_heart_or_central_circulatory_system',t:'In direct contact with the heart or central circulatory system'},
+            {k:'contacts_central_nervous_system',t:'In direct contact with the brain, spinal cord or meninges'},
+            {k:'is_reusable_surgical_instrument',t:'A reusable surgical instrument (cuts, drills, clamps, retracts), not connected to powered equipment',show:function(d){return !d.is_implantable}},
+            {k:'has_biological_effect_or_wholly_mainly_absorbed',t:'Has a biological effect, or is wholly or mainly absorbed'},
+            {k:'undergoes_chemical_change_in_body',t:'Undergoes chemical change in the body'},
+            {k:'administers_medicinal_product',t:'Administers medicines'},
+            {k:'administration_potentially_hazardous',t:'…in a way that is potentially hazardous',show:function(d){return d.administers_medicinal_product&&d.duration==='transient'&&!d.is_implantable}},
+            {k:'supplies_ionising_radiation',t:'Supplies ionising radiation'},
+            {k:'placed_in_teeth',t:'Placed in the teeth (filling, crown), not in the jawbone'},
+            {k:'is_joint_replacement',t:'Total or partial joint replacement',show:function(d){return d.is_implantable||d.duration==='long_term'}},
+            {k:'is_spinal_disc_replacement_or_contacts_spinal_column',t:'Spinal disc replacement, or an implant touching the spinal column',show:function(d){return d.is_implantable||d.duration==='long_term'}},
+            {k:'is_ancillary_component',t:'…but only an ancillary component (screw, wedge, plate)',show:function(d){return d.is_joint_replacement||d.is_spinal_disc_replacement_or_contacts_spinal_column}},
+            {k:'is_breast_implant_or_surgical_mesh',t:'Breast implant or surgical mesh',show:function(d){return d.is_implantable||d.duration==='long_term'}},
+            {k:'is_active_implantable_or_accessory',t:'Active implantable device or its accessory (e.g. pacemaker, lead)',show:function(d){return d.is_implantable||d.duration==='long_term'}}
+          ]},
+          {group:'Powered therapy',show:at('therapeutic'),items:[
+            {k:'administers_or_exchanges_energy',t:'Delivers energy to, or exchanges energy with, the body'},
+            {k:'energy_exchange_potentially_hazardous',t:'…in a potentially hazardous way (nature, density or site of the energy)',show:function(d){return d.administers_or_exchanges_energy}},
+            {k:'emits_ionising_radiation_therapeutic',t:'Emits ionising radiation for therapy'},
+            {k:'is_active_therapeutic_with_integrated_diagnostic_function',t:'Has a built-in diagnostic function that largely decides the therapy (closed loop, AED)'}
+          ]},
+          {group:'Powered diagnosis and monitoring',show:at('diagnostic_monitoring'),items:[
+            {k:'diagnostic_supplies_energy_absorbed_by_body',t:'Supplies energy that the body absorbs'},
+            {k:'diagnostic_illuminates_patient_visible_spectrum_only',t:'…but only visible light to illuminate the patient',show:function(d){return d.diagnostic_supplies_energy_absorbed_by_body}},
+            {k:'diagnostic_images_in_vivo_radiopharmaceutical_distribution',t:'Images radiopharmaceuticals in the body'},
+            {k:'diagnostic_allows_direct_diagnosis_or_monitoring_of_vital_physiological_processes',t:'Directly diagnoses or monitors vital physiological processes'},
+            {k:'diagnostic_variation_could_cause_immediate_danger',t:'…where a change could mean immediate danger (ICU, anaesthesia, emergency)',show:function(d){return d.diagnostic_allows_direct_diagnosis_or_monitoring_of_vital_physiological_processes}},
+            {k:'emits_ionising_radiation_diagnostic_or_interventional',t:'Emits ionising radiation for diagnostic or interventional radiology'}
+          ]},
+          {group:'Any powered device',show:function(d){return d.is_active&&!d.is_software},items:[
+            {k:'administers_or_removes_substances_to_from_body',t:'Gives or removes medicines, body liquids or other substances'},
+            {k:'administration_or_removal_potentially_hazardous',t:'…in a potentially hazardous way (e.g. infusion pump, ventilator)',show:function(d){return d.administers_or_removes_substances_to_from_body}},
+            {k:'controls_monitors_or_influences_therapeutic_class_iib_device',t:'Controls or monitors a Class IIb therapeutic device'},
+            {k:'controls_monitors_or_influences_active_implantable_device',t:'Controls or monitors an active implantable device'}
+          ]},
+          {group:'Software',show:function(d){return d.is_software},items:[
+            {sub:{k:'software_decision_impact',label:'Does it inform diagnosis or treatment decisions?',opts:[['not_applicable','No'],['other_impact','Yes, and a wrong output would have limited impact'],['serious_deterioration_or_surgical_intervention','Yes, a wrong output could cause serious deterioration or surgery'],['death_or_irreversible_deterioration','Yes, a wrong output could cause death or irreversible harm']]}},
+            {k:'software_monitors_physiological_processes',t:'Monitors physiological processes'},
+            {k:'software_monitors_vital_parameters_with_immediate_danger_potential',t:'…vital parameters where a change could mean immediate danger',show:function(d){return d.software_monitors_physiological_processes}},
+            {sub:{k:'drives_or_influences_device_class',label:'If it drives another device, that device\'s class',opts:[['','It is independent'],['I','Class I'],['IIa','Class IIa'],['IIb','Class IIb'],['III','Class III']],nullable:true}}
+          ]},
+          {group:'Materials and special cases',items:[
+            {k:'contains_ancillary_medicinal_substance',t:'Contains a medicinal substance that supports the device\'s action (e.g. drug coating, antibiotic cement)'},
+            {k:'contains_human_or_animal_tissue_or_cells',t:'Made with non-viable human or animal tissue or cells',sub:{k:'tissue_origin',opts:[['animal','Animal origin'],['human','Human origin']]}},
+            {k:'tissue_contacts_intact_skin_only',t:'…and it only touches intact skin',show:function(d){return d.contains_human_or_animal_tissue_or_cells&&d.tissue_origin==='animal'}},
+            {k:'contains_nanomaterial',t:'Contains nanomaterial',sub:{k:'nanomaterial_internal_exposure_potential',label:'Potential for internal exposure',opts:[['negligible','Negligible'],['low','Low'],['medium','Medium'],['high','High']]}},
+            {k:'is_contraceptive_or_sti_prevention',t:'Used for contraception or preventing sexually transmitted infections'},
+            {k:'composed_of_substances_absorbed_or_dispersed_via_orifice_or_skin',t:'Made of substances that are absorbed by or dispersed in the body (gel, spray, drops, capsule)'},
+            {k:'systemically_absorbed',t:'…and absorbed systemically to work',show:function(d){return d.composed_of_substances_absorbed_or_dispersed_via_orifice_or_skin}},
+            {k:'applied_to_skin_or_nasal_oral_cavity_to_pharynx',t:'…applied to skin, or in the nose or mouth as far as the throat, and acts there',show:function(d){return d.composed_of_substances_absorbed_or_dispersed_via_orifice_or_skin}},
+            {sub:{k:'disinfect_clean_target',label:'Does it disinfect, clean or sterilise?',opts:[['none','No'],['contact_lenses','Contact lenses'],['other_medical_device','Other medical devices'],['invasive_device_end_point','Invasive devices, as the last processing step'],['physical_action_only_non_lens','Cleans by physical action only']]}},
+            {k:'is_xray_diagnostic_image_recording_device',t:'Records diagnostic X-ray images'},
+            {k:'placed_on_market_sterile',t:'Supplied sterile'},
+            {k:'has_measuring_function',t:'Has a measuring function'}
+          ]}
+        ];
+
+        // Derived fields: 'contact' and 'power' are form-only choices mapped onto engine attributes.
+        function derive(){
+          var c=state.contact||'non', p=state.power||'none';
+          state.invasiveness=c==='non'?'non_invasive':c==='orifice'?'invasive_body_orifice':'surgically_invasive';
+          state.is_implantable=c==='implant';
+          if(c==='non') state.duration='not_applicable';
+          else if(c==='implant') state.duration='long_term';
+          else if(!state.duration||state.duration==='not_applicable') state.duration='transient';
+          if(c!=='orifice') state.body_orifice_site='not_applicable';
+          else if(!state.body_orifice_site||state.body_orifice_site==='not_applicable') state.body_orifice_site='other_orifice';
+          state.is_software=p==='software';
+          state.is_active=p!=='none'&&p!=='software';
+          state.active_type=state.is_active?p:'not_active';
+        }
+        function fromAttributes(a){
+          state={}; for(var k in E.DEFAULTS) if(k!=='name'&&a[k]!==undefined) state[k]=a[k];
+          state.contact=a.is_implantable?'implant':a.invasiveness==='surgically_invasive'?'surgical':a.invasiveness==='invasive_body_orifice'?'orifice':'non';
+          state.power=a.is_software?'software':(!a.is_active||a.active_type==='not_active')?'none':a.active_type;
+        }
+        // Only attributes whose question is currently visible count, so hidden leftovers can't affect the result.
+        function visibleAttributes(){
+          derive();
+          var d={}; ['invasiveness','duration','is_implantable','is_active','active_type','is_software','body_orifice_site'].forEach(function(k){d[k]=state[k]});
+          Q.forEach(function(q){
+            if(!q.group||(q.show&&!q.show(state))) return;
+            q.items.forEach(function(it){
+              if(it.show&&!it.show(state)) return;
+              if(it.k&&state[it.k]) d[it.k]=true;
+              if(it.sub&&(!it.k||state[it.k])){var v=state[it.sub.k]; if(v===undefined) v=it.sub.opts[0][0]; d[it.sub.k]=(it.sub.nullable&&v==='')?null:v;}
+            });
+          });
+          return d;
+        }
+        function select(k,opts,label,nullable){
+          var wrap=el('div',null,'mdr-q'), id='mdr-f-'+k;
+          if(label){var l=el('label',label,'mdr-l'); l.htmlFor=id; wrap.appendChild(l);}
+          var s=document.createElement('select'); s.id=id; if(!label) s.setAttribute('aria-label',k.replace(/_/g,' '));
+          opts.forEach(function(o){var op=el('option',o[1]); op.value=o[0]; s.appendChild(op)});
+          var cur=state[k]; if(cur==null) cur=nullable?'':opts[0][0]; s.value=cur;
+          s.addEventListener('change',function(){state[k]=s.value; drawForm(); runLocal()});
+          wrap.appendChild(s); return wrap;
+        }
+        function drawForm(){
+          derive();
+          var host=$('mdr-questions'), focusId=document.activeElement&&document.activeElement.id; host.textContent='';
+          Q.forEach(function(q){
+            if(q.show&&!q.show(state)) return;
+            if(q.sel){ if(state[q.sel]==null) state[q.sel]=q.opts[0][0]; host.appendChild(select(q.sel,q.opts,q.label)); return; }
+            var fs=document.createElement('fieldset'); fs.appendChild(el('legend',q.group));
+            q.items.forEach(function(it){
+              if(it.show&&!it.show(state)) return;
+              if(it.k){
+                var lab=el('label',null,'mdr-check'), cb=document.createElement('input'); cb.type='checkbox'; cb.id='mdr-f-'+it.k; cb.checked=!!state[it.k];
+                cb.addEventListener('change',function(){state[it.k]=cb.checked; drawForm(); runLocal()});
+                lab.appendChild(cb); lab.appendChild(el('span',it.t)); fs.appendChild(lab);
+              }
+              if(it.sub&&(!it.k||state[it.k])){var s=select(it.sub.k,it.sub.opts,it.sub.label,it.sub.nullable); if(it.k) s.className='mdr-q mdr-sub'; fs.appendChild(s);}
+            });
+            if(fs.children.length>1) host.appendChild(fs);
+          });
+          if(focusId&&$(focusId)) $(focusId).focus();
+        }
+
+        // ---- result rendering (all text via textContent) ----
+        function render(r){
+          out.textContent='';
+          if(r.banner){out.appendChild(el('p',r.banner,'mdr-warn')).style.margin='0 0 14px'}
+          var head=el('div',null,'mdr-class');
+          head.appendChild(el('div',r.cls?('Class '+r.cls):'No class','v'));
+          head.appendChild(el('div',r.cls?(r.qualifiers.length?'With sub-class '+r.qualifiers.join(', ')+' (sterile / measuring / reusable surgical instrument), which brings in a notified body for that aspect.':({I:'Lowest risk. Usually self-declared by the manufacturer.',IIa:'Medium risk. Needs a notified body.',IIb:'Medium to high risk. Needs a notified body.',III:'Highest risk. Notified body review of the design itself.'})[r.cls]):'No rule matched these answers.','k'));
+          out.appendChild(head);
+          var lad=el('div',null,'mdr-ladder'); ['I','IIa','IIb','III'].forEach(function(c){lad.appendChild(el('span',c,c===r.cls?'on':''))}); out.appendChild(lad);
+          if(r.source) out.appendChild(el('p',r.source,'mdr-msg'));
+
+          out.appendChild(el('h4','Rules that fired'));
+          var t=el('table',null,'spec');
+          r.rules.forEach(function(o){
+            var tr=el('tr'), a=el('td'); a.appendChild(el('b',o.rule_id+' → '+o.device_class));
+            var b=el('td',o.rationale+(o.device_class===r.cls&&r.rules.length>1?' (decides the class)':''));
+            if(o.ambiguous_note){b.appendChild(el('div','Judgement call: '+o.ambiguous_note,'mdr-warn'))}
+            tr.appendChild(a); tr.appendChild(b); t.appendChild(tr);
+          });
+          out.appendChild(t);
+          if(r.rules.length>1) out.appendChild(el('p','Where several rules apply, the strictest one sets the class (Annex VIII, 3.5).','mdr-msg')).style.marginTop='8px';
+
+          out.appendChild(el('h4','Standards usually involved'));
+          var ul=el('ul',null,'tools');
+          r.standards.forEach(function(s){var li=el('li',s.standard_id); li.title=s.title+(s.why?' · '+s.why:''); ul.appendChild(li)});
+          out.appendChild(ul);
+          out.appendChild(el('p','Hover a standard for its title. Commonly used to show conformity, not a checklist.','mdr-msg')).style.marginTop='8px';
+
+          if(r.signals&&r.signals.length){
+            var d=el('details'); d.appendChild(el('summary','What was read from the description ('+r.signals.length+')'));
+            var l=el('ul',null,'plain'); l.style.marginTop='8px'; r.signals.forEach(function(s){l.appendChild(el('li',s))}); d.appendChild(l); out.appendChild(d);
+          }
+          if(r.notes&&r.notes.length){
+            var n=el('details'); n.open=true; n.appendChild(el('summary','Not settled by the description ('+r.notes.length+')'));
+            var l2=el('ul',null,'plain'); l2.style.marginTop='8px'; r.notes.forEach(function(s){l2.appendChild(el('li',s))}); n.appendChild(l2); out.appendChild(n);
+          }
+          if(r.attributes){
+            var p=el('p',null,'mdr-msg'); p.style.marginTop='14px';
+            var btn=el('button','Check or change the extracted answers','mdr-link'); btn.type='button';
+            btn.addEventListener('click',function(){fromAttributes(r.attributes); setMode('form')});
+            p.appendChild(btn); out.appendChild(p);
+          }
+        }
+        function standardsFrom(list){var s=[]; list.forEach(function(g){(g.standards||[]).forEach(function(x){s.push({standard_id:x.standard_id,title:x.title,why:g.title})})}); return s}
+        function runLocal(){
+          var d=visibleAttributes(), r=E.classify(d);
+          render({cls:r.device_class,qualifiers:r.qualifiers,rules:r.triggered_rules,standards:standardsFrom(E.mapStandards(d).filter(function(g){return g.applies})),source:'Worked out in your browser from the answers on the left.'});
+        }
+        function fallbackLocal(text,why){
+          render({cls:null,qualifiers:[],rules:[],standards:[],banner:why});
+          var p=el('p',null,'mdr-msg'); p.style.marginTop='12px'; var b=el('button','Use the questions mode instead','mdr-link'); b.type='button';
+          b.addEventListener('click',function(){setMode('form')}); p.appendChild(b); out.appendChild(p);
+        }
+        function readImage(file){
+          return new Promise(function(res,rej){
+            var img=new Image(), url=URL.createObjectURL(file);
+            img.onload=function(){
+              var k=Math.min(1,1024/Math.max(img.width,img.height)), c=document.createElement('canvas');
+              c.width=Math.round(img.width*k); c.height=Math.round(img.height*k);
+              var g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height);
+              URL.revokeObjectURL(url); res({media_type:'image/jpeg',data:c.toDataURL('image/jpeg',.82).split(',')[1]});
+            };
+            img.onerror=function(){URL.revokeObjectURL(url); rej(new Error('image'))}; img.src=url;
+          });
+        }
+        function runRemote(){
+          var text=$('mdr-desc').value.trim(), btn=$('mdr-run');
+          if(text.length<10){out.textContent=''; out.appendChild(el('p','Write a sentence or two about the device first.','mdr-msg')); return}
+          btn.disabled=true; btn.textContent='Classifying…';
+          out.textContent=''; out.appendChild(el('p','Reading the description, then applying the rules. The first request can take a few seconds.','mdr-msg'));
+          var file=$('mdr-img').files[0];
+          (file?readImage(file).catch(function(){return null}):Promise.resolve(null)).then(function(image){
+            var body={description:text}; if(image) body.image=image;
+            var ctl=new AbortController(), timer=setTimeout(function(){ctl.abort()},75000);
+            return fetch(API+'/classify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ctl.signal})
+              .then(function(resp){clearTimeout(timer); return resp.json().then(function(j){return {ok:resp.ok,status:resp.status,j:j}})});
+          }).then(function(x){
+            if(!x.ok){fallbackLocal(text,x.status===429?'The demo server is rate-limiting requests from your connection. '+(x.j.error||''):'The server could not process that: '+(x.j.error||'request rejected')+'.'); return}
+            var j=x.j, ex=j.extraction||{};
+            render({cls:j.predicted_class,qualifiers:j.qualifiers||[],rules:j.triggered_rules||[],standards:standardsFrom((j.standards_mapping||{}).applicable_requirements||[]),
+              source:j.extractor==='llm'?'Attributes read from your description by a language model; class computed by the rules engine.':'Attributes read by a keyword matcher; class computed by the rules engine.',
+              banner:j.extractor==='llm'?null:(j.fallback_reason||'The language model was unavailable.')+' A simpler keyword reader was used, which misses more. Check the extracted answers.',
+              signals:ex.matched_signals,notes:(ex.unmatched_notes||[]).concat(ex.clarifying_questions||[]),attributes:j.attributes});
+          }).catch(function(){fallbackLocal(text,'The demo server could not be reached.')})
+            .then(function(){btn.disabled=false; btn.textContent='Classify'});
+        }
+
+        // ---- modes, examples, wiring ----
+        function setMode(m){
+          mode=m; $('mdr-text').hidden=m!=='text'; $('mdr-form').hidden=m!=='form';
+          $('mdr-m-text').setAttribute('aria-pressed',m==='text'); $('mdr-m-form').setAttribute('aria-pressed',m==='form');
+          if(m==='form'){drawForm(); runLocal()}
+        }
+        $('mdr-m-text').addEventListener('click',function(){setMode('text')});
+        $('mdr-m-form').addEventListener('click',function(){setMode('form')});
+        $('mdr-run').addEventListener('click',runRemote);
+        $('mdr-desc').addEventListener('input',function(){$('mdr-count').textContent=this.value.length+' / 2000'});
+        [['Hip replacement','A metal-on-polyethylene total hip joint replacement implant, supplied sterile.'],
+         ['Insulin pump','A wearable insulin pump with a built-in continuous glucose sensor that automatically adjusts insulin delivery (closed loop).'],
+         ['Wound dressing','A sterile hydrogel dressing for chronic leg ulcers that keeps the wound moist to help it heal.'],
+         ['ECG app','A smartphone app that analyses a single-lead ECG and alerts the user to possible atrial fibrillation.'],
+         ['Syringe','A sterile single-use hypodermic syringe with needle, used to inject medicines.']
+        ].forEach(function(x){var b=el('button',x[0]); b.type='button'; b.addEventListener('click',function(){var t=$('mdr-desc'); t.value=x[1]; t.dispatchEvent(new Event('input'))}); $('mdr-ex-text').appendChild(b)});
+        [['Hip replacement',{contact:'implant',is_joint_replacement:true,placed_on_market_sterile:true}],
+         ['Scalpel',{contact:'surgical',duration:'transient',is_reusable_surgical_instrument:true}],
+         ['Pulse oximeter',{contact:'non',power:'diagnostic_monitoring',diagnostic_supplies_energy_absorbed_by_body:true,diagnostic_allows_direct_diagnosis_or_monitoring_of_vital_physiological_processes:true,has_measuring_function:true}],
+         ['Drug-eluting stent',{contact:'implant',contacts_heart_or_central_circulatory_system:true,contains_ancillary_medicinal_substance:true,placed_on_market_sterile:true}],
+         ['Contact lens solution',{contact:'non',disinfect_clean_target:'contact_lenses'}],
+         ['Reset',{}]
+        ].forEach(function(x){var b=el('button',x[0]); b.type='button'; b.addEventListener('click',function(){state=JSON.parse(JSON.stringify(x[1])); drawForm(); runLocal()}); $('mdr-ex-form').appendChild(b)});
+      })();
+      </script>
     </article>
 
     <!-- ========== REVIEWS ========== -->
