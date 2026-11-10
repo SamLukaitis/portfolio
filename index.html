@@ -524,6 +524,8 @@ html{scroll-behavior:smooth}
         #mdr .spec td:first-child{width:24%}
         #mdr .spec td:last-child{font-family:var(--body);font-size:14px}
         #mdr .spec b{font-family:var(--mono);font-weight:500;font-size:12.5px}
+        #mdr .mdr-clause{font-size:13px;color:var(--muted);margin-top:4px}
+        #mdr .mdr-cite{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px}
         #mdr details{margin-top:14px;font-size:14px}
         #mdr summary{cursor:pointer;color:var(--cobalt)}
         #mdr .mdr-link{appearance:none;background:none;border:0;padding:0;color:var(--cobalt);font:inherit;text-decoration:underline;cursor:pointer}
@@ -532,7 +534,7 @@ html{scroll-behavior:smooth}
         <div>
           <p class="kicker">Software project · Regulatory</p>
           <h2>An EU MDR device classifier you can try</h2>
-          <p class="sub">Describe a medical device and it predicts the risk class under Regulation (EU) 2017/745, shows which Annex VIII rules fired, and lists the standards usually used to show conformity. A language model only reads the description into structured attributes. The class comes from a rules engine I wrote against the regulation text and tested against the official MDCG worked examples.</p>
+          <p class="sub">Describe a medical device and it predicts the risk class under Regulation (EU) 2017/745, shows which Annex VIII rules and clauses fired, what that class means for the route to market, and the standards usually used to show conformity. A language model only reads the description into structured attributes. The class comes from a rules engine I wrote against the regulation text and tested against the official MDCG worked examples.</p>
         </div>
         <table class="tblock" aria-label="Project details">
           <tr><td>Regulation</td><td>EU MDR 2017/745</td></tr>
@@ -600,7 +602,8 @@ html{scroll-behavior:smooth}
             <h4>The model reads, the code decides</h4>
             <p>Classification under the MDR is a legal test with a right answer for a given set of facts, so I didn't want a language model producing it. The model's job is narrow: read a description and fill in about 65 yes/no and multiple-choice attributes, such as how invasive the device is, how long it stays in the body and whether it is powered. Its output is forced into a fixed schema that has no field for a class.</p>
             <p>A separate rules engine takes those attributes and applies all 22 rules. Where several rules apply, Annex VIII says the strictest one wins, so the engine evaluates every rule and reports the highest class along with every rule that fired.</p>
-            <p>The standards list comes from a third step that maps the device's attributes to the general safety and performance requirements in Annex I, for example ISO 10993 for anything in contact with tissue and IEC 60601 for powered devices.</p>
+            <p>Two more steps turn the class into something practical. One maps the device to the general safety and performance requirements in Annex I and the standards usually used for them, for example ISO 10993 for anything in contact with tissue and IEC 60601 for powered devices. The other lists what the class triggers under the regulation: the conformity assessment route in Article 52, how far a notified body is involved, whether a clinical investigation or expert panel is expected, and the post-market reports required.</p>
+            <p>It also re-runs the rules with each stated fact removed in turn, to show which facts the class actually depends on.</p>
           </div>
           <div>
             <h4>How I checked it</h4>
@@ -625,6 +628,7 @@ html{scroll-behavior:smooth}
               <li>It doesn't decide whether something is a medical device at all, and it doesn't cover in vitro diagnostics, which fall under a separate regulation.</li>
               <li>Some rules turn on judgement, such as whether a hazard is "potentially hazardous" or how serious a software error could be. The tool flags these instead of hiding them.</li>
               <li>The standards are the ones commonly used to show conformity. It doesn't check which editions are currently harmonised or pick device-specific parts.</li>
+              <li>The route-to-market summary paraphrases the main articles. It leaves out custom-made and investigational devices and the transitional rules for older certificates.</li>
               <li>The model can misread a description. That's why the attributes it extracted are shown and can be edited in the questions mode.</li>
             </ul>
           </div>
@@ -808,11 +812,33 @@ html{scroll-behavior:smooth}
           r.rules.forEach(function(o){
             var tr=el('tr'), a=el('td'); a.appendChild(el('b',o.rule_id+' → '+o.device_class));
             var b=el('td',o.rationale+(o.device_class===r.cls&&r.rules.length>1?' (decides the class)':''));
+            if(o.matched_clauses&&o.matched_clauses.length){b.appendChild(el('div','Clause: '+o.matched_clauses.join('; ')+'.','mdr-clause'))}
             if(o.ambiguous_note){b.appendChild(el('div','Judgement call: '+o.ambiguous_note,'mdr-warn'))}
             tr.appendChild(a); tr.appendChild(b); t.appendChild(tr);
           });
           out.appendChild(t);
           if(r.rules.length>1) out.appendChild(el('p','Where several rules apply, the strictest one sets the class (Annex VIII, 3.5).','mdr-msg')).style.marginTop='8px';
+
+          if(r.cls&&r.drivers){
+            out.appendChild(el('h4','What the class depends on'));
+            if(r.drivers.length){
+              var dl=el('ul',null,'plain');
+              r.drivers.forEach(function(x){dl.appendChild(el('li','Without "'+label(x.attribute,x.value)+'" it would be '+(x.class_without?'Class '+x.class_without:'unclassified')+'.'))});
+              out.appendChild(dl);
+            } else out.appendChild(el('p',r.rules.length>1?'No single answer changes the class: more than one rule gives it independently.':'This is the default class for the answers given.','mdr-msg'));
+          }
+          if(r.pathway&&r.pathway.length){
+            out.appendChild(el('h4','What that class means in practice'));
+            var pt=el('table',null,'spec');
+            r.pathway.forEach(function(i){
+              if(!i.applies) return;
+              var tr=el('tr'), a=el('td',i.title), b=el('td',i.summary);
+              if(i.caveat) b.appendChild(el('div',i.caveat,'mdr-clause'));
+              b.appendChild(el('div',i.citation.replace('Regulation (EU) 2017/745, ','MDR '),'mdr-cite'));
+              tr.appendChild(a); tr.appendChild(b); pt.appendChild(tr);
+            });
+            out.appendChild(pt);
+          }
 
           out.appendChild(el('h4','Standards usually involved'));
           var ul=el('ul',null,'tools');
@@ -835,10 +861,16 @@ html{scroll-behavior:smooth}
             p.appendChild(btn); out.appendChild(p);
           }
         }
+        var LABELS={}; Q.forEach(function(q){(q.items||[]).forEach(function(it){if(it.k) LABELS[it.k]=it.t.replace(/^…\s*/,'')})});
+        function label(k,v){
+          if(LABELS[k]) return LABELS[k];
+          var name=k.replace(/_/g,' ');
+          return v===true?name:name+': '+String(v).replace(/_/g,' ');
+        }
         function standardsFrom(list){var s=[]; list.forEach(function(g){(g.standards||[]).forEach(function(x){s.push({standard_id:x.standard_id,title:x.title,why:g.title})})}); return s}
         function runLocal(){
           var d=visibleAttributes(), r=E.classify(d);
-          render({cls:r.device_class,qualifiers:r.qualifiers,rules:r.triggered_rules,standards:standardsFrom(E.mapStandards(d).filter(function(g){return g.applies})),source:'Worked out in your browser from the answers on the left.'});
+          render({cls:r.device_class,qualifiers:r.qualifiers,rules:r.triggered_rules,standards:standardsFrom(E.mapStandards(d).filter(function(g){return g.applies})),pathway:E.buildPathway(d),drivers:E.classDrivers(d),source:'Worked out in your browser from the answers on the left.'});
         }
         function fallbackLocal(text,why){
           render({cls:null,qualifiers:[],rules:[],standards:[],banner:why});
@@ -874,7 +906,7 @@ html{scroll-behavior:smooth}
             render({cls:j.predicted_class,qualifiers:j.qualifiers||[],rules:j.triggered_rules||[],standards:standardsFrom((j.standards_mapping||{}).applicable_requirements||[]),
               source:j.extractor==='llm'?'Attributes read from your description by a language model; class computed by the rules engine.':'Attributes read by a keyword matcher; class computed by the rules engine.',
               banner:j.extractor==='llm'?null:(j.fallback_reason||'The language model was unavailable.')+' A simpler keyword reader was used, which misses more. Check the extracted answers.',
-              signals:ex.matched_signals,notes:(ex.unmatched_notes||[]).concat(ex.clarifying_questions||[]),attributes:j.attributes});
+              pathway:j.regulatory_pathway,drivers:j.class_drivers,signals:ex.matched_signals,notes:(ex.unmatched_notes||[]).concat(ex.clarifying_questions||[]),attributes:j.attributes});
           }).catch(function(){fallbackLocal(text,'The demo server could not be reached.')})
             .then(function(){btn.disabled=false; btn.textContent='Classify'});
         }
