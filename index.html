@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sam Lukaitis · Engineering Portfolio</title>
-<meta name="description" content="Engineering portfolio of Sam Lukaitis: a ferromagnetic cerebral stent for cell therapy, a bird-of-prey robotic gripper, stent design reviews and Marlo.">
+<meta name="description" content="Engineering portfolio of Sam Lukaitis: a ferromagnetic cerebral stent for cell therapy, a bird-of-prey robotic gripper, a live EU MDR device classifier, stent design reviews and Marlo.">
 <meta property="og:title" content="Sam Lukaitis · Engineering Portfolio">
 <meta property="og:description" content="Medical devices, simulation and hardware. Mechanical Engineering, University of Edinburgh.">
 <meta property="og:image" content="https://samlukaitis.github.io/portfolio/assets/rings-dense.webp">
@@ -62,14 +62,15 @@ h1 em{font-style:normal;color:var(--heat)}
 .does dd{margin:0;font-size:15px}
 .contact{font-family:var(--mono);font-size:14px;margin:0;display:flex;flex-wrap:wrap;gap:8px}
 .contact span{color:var(--muted)}
-.mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;aspect-ratio:1/1}
+.mosaic{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:3fr 2fr;gap:10px;aspect-ratio:6/5}
+.mosaic a{grid-column:span 2}
+.mosaic .m1,.mosaic .m2{grid-column:span 3}
+.mosaic span{white-space:nowrap}
+@media (max-width:760px){.mosaic a:nth-child(n+3) span{font-size:10px;left:5px;bottom:5px;padding:2px 5px;letter-spacing:0}}
 .mosaic a{position:relative;overflow:hidden;border:1px solid var(--line);background:var(--plate);display:block;min-height:0}
 .mosaic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
 .mosaic a:hover img{transform:scale(1.04)}
 .mosaic .m1 img{object-fit:contain;padding:8%}
-.mosaic .m2 img{object-position:40% 50%}
-.mosaic .m3 img{object-position:62% 40%}
-.mosaic .m4 img{object-position:72% 50%}
 .mosaic span{position:absolute;left:8px;bottom:8px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;background:var(--ink);color:var(--paper);padding:3px 7px}
 .docs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
 .docs a{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--cobalt);color:var(--cobalt);text-decoration:none;padding:6px 12px;font-size:14px;font-weight:500}
@@ -93,13 +94,13 @@ figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.45}
 figcaption b{font-family:var(--mono);font-weight:500;color:var(--ink);font-size:12px}
 
 /* glance */
-.glance{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;padding-block:32px 8px}
-@media (max-width:1180px){.glance{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.glance{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;padding-block:32px 8px}
+@media (max-width:1180px){.glance{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .glance a{display:grid;grid-template-rows:auto 1fr;gap:12px;color:inherit;text-decoration:none}
 .glance .thumb{aspect-ratio:16/10;background:var(--plate);border:1px solid var(--line);overflow:hidden}
 .glance .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
 .glance a:hover .thumb img{transform:scale(1.03)}
-.glance h3{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.2;margin:0 0 4px}
+.glance h3{font-family:var(--display);font-weight:700;font-size:18px;line-height:1.2;margin:0 0 4px}
 .glance p{margin:0;font-size:14px;color:var(--muted)}
 .glance .num{font-family:var(--mono);font-size:13px;color:var(--heat);font-weight:500}
 
@@ -227,9 +228,10 @@ html{scroll-behavior:smooth}
       </div>
       <div class="mosaic" aria-label="Project highlights">
         <a href="#stent" class="m1"><img src="assets/rings-dense.webp" alt="Simulated cell-capture zones around stent struts"><span>Magnetic stent</span></a>
-        <a href="#claw" class="m2"><img src="assets/render-grip.webp" alt="Render of the robotic claw gripping a cylinder"><span>Robotic gripper</span></a>
-        <a href="#reviews" class="m3"><img src="assets/essay-crosssection.webp" alt="Artery cross-sections across stent generations"><span>Stent reviews</span></a>
-        <a href="#marlo" class="m4"><img src="assets/marlo-cover.webp" alt="Marlo assistant slide"><span>Marlo</span></a>
+        <a href="#claw" class="m2"><img src="assets/tile-gripper.webp" alt="Render of the robotic claw gripping a cylinder"><span>Robotic gripper</span></a>
+        <a href="#mdr" class="m3"><img src="assets/mdr-tile.svg" alt="Risk class ladder from I to III with class III highlighted"><span>MDR classifier</span></a>
+        <a href="#reviews" class="m4"><img src="assets/tile-reviews.webp" alt="Artery cross-section with a second-generation drug-eluting stent"><span>Stent reviews</span></a>
+        <a href="#marlo" class="m5"><img src="assets/tile-marlo.webp" alt="Phone showing a WhatsApp conversation with Marlo"><span>Marlo</span></a>
       </div>
     </section>
 
@@ -239,7 +241,7 @@ html{scroll-behavior:smooth}
         <div><span class="num">Dissertation · 2026</span><h3>Ferromagnetic cerebral stent</h3><p>COMSOL and a Python model built from scratch, agreeing to within 1%.</p></div>
       </a>
       <a href="#claw">
-        <div class="thumb"><img src="assets/render-grip.webp" alt="" loading="lazy" style="object-position:40% 50%"></div>
+        <div class="thumb"><img src="assets/thumb-gripper.webp" alt="" loading="lazy"></div>
         <div><span class="num">Group build · 2025</span><h3>Bird-of-prey gripper</h3><p>Tendon-driven, 3D-printed claw with adjustable digit spread from 29° to 88°.</p></div>
       </a>
       <a href="#mdr">
@@ -247,11 +249,11 @@ html{scroll-behavior:smooth}
         <div><span class="num">Software · 2026 · Live demo</span><h3>EU MDR device classifier</h3><p>Describe a device, get its risk class, the rules behind it and the standards involved.</p></div>
       </a>
       <a href="#reviews">
-        <div class="thumb"><img src="assets/essay-crosssection.webp" alt="" loading="lazy" style="object-position:62% 40%"></div>
+        <div class="thumb"><img src="assets/thumb-reviews.webp" alt="" loading="lazy"></div>
         <div><span class="num">Written work · 2026</span><h3>Stent design reviews</h3><p>Fifty years of coronary stents, read as a series of engineering fixes.</p></div>
       </a>
       <a href="#marlo">
-        <div class="thumb"><img src="assets/marlo-cover.webp" alt="" loading="lazy" style="object-position:70% 50%"></div>
+        <div class="thumb"><img src="assets/thumb-marlo.webp" alt="" loading="lazy"></div>
         <div><span class="num">Side project · 2026</span><h3>Marlo</h3><p>AI assistant over WhatsApp and SMS, in testing with ~10 users.</p></div>
       </a>
     </div>
@@ -262,7 +264,7 @@ html{scroll-behavior:smooth}
         <div>
           <p class="kicker">Individual dissertation · MECE10008</p>
           <h2>A ferromagnetic cerebral stent that holds therapeutic cells in place</h2>
-          <p class="sub">Cell therapies for neurological disease often fail because the cells don't reach the target, or don't stay there. I tested whether a stent, magnetised by an MRI scanner's 1.5 T field, could pull iron-oxide-labelled cells out of blood flow and keep them close to the vessel wall.</p>
+          <p class="sub">Cellular therapies for neurological disorders are primarily limited by inefficient delivery and retention of therapeutic cells at target sites. This project is a feasibility analysis of SPION-labelled cell capture by a ferromagnetic cerebral stent under an external 1.5 T field, representative of an MRI environment.</p>
           <p class="docs"><a href="docs/Lukaitis_Dissertation_Magnetic_Cerebral_Stent.pdf" target="_blank" rel="noopener">Full dissertation <small>PDF · 7.8 MB · 51 pages</small></a></p>
         </div>
         <table class="tblock" aria-label="Project details">
@@ -344,6 +346,7 @@ html{scroll-behavior:smooth}
               <li><strong>Capture efficiency fell from 100% to 35%</strong> as mean flow rose from 0.02 to 0.6 m/s.</li>
               <li><strong>The static test is misleading.</strong> The usual |F<sub>mag</sub>| &gt; |F<sub>drag</sub>| check underestimates capture by 13.9× because cells drift towards the wall gradually as they travel along the stent.</li>
               <li><strong>Strut count doesn't change reach.</strong> The gradient falls off as a power law (exponent about −1.25 to −1.34) whatever the number of struts. Strut geometry and magnetisation set the range; strut count sets how evenly the circumference is covered.</li>
+              <li><strong>The MRI field does real work.</strong> It saturates the SPION loading, drives the stent into saturation magnetisation and raises the force parameter by two to three orders of magnitude. The MRI environment is an integral part of the capture physics, not just a convenient clinical context.</li>
             </ul>
           </div>
           <figure><div class="plate"><img src="assets/gradient.webp" alt="Log-log plot of gradient against distance from strut, COMSOL and analytical" loading="lazy"></div><figcaption><b>FIG.</b> Gradient decay away from the strut: COMSOL points against analytical curves.</figcaption></figure>
@@ -359,12 +362,13 @@ html{scroll-behavior:smooth}
         <div class="cols">
           <div>
             <h4>Technical</h4>
-            <p>The biggest finding was about method. At typical post-stenosis conditions (200 pg, 0.2 m/s), the static force balance predicted a capture range of 36 µm, which would have suggested the device can't work. Tracking each cell along its path gave 131 µm. A cell that starts 160 µm away feels only about 50 pN at first, but it drifts inward over the 2 mm approach until the force grows by roughly three orders of magnitude and it gets caught.</p>
+            <p>The principal conclusion is that trajectory integration is essential for the minimum level of physical fidelity needed to predict capture at cerebral flow conditions. At typical post-stenosis conditions (200 pg, 0.2 m/s), the static force balance predicted a capture range of 36 µm, which would have suggested the device can't work. Tracking each cell along its path gave 131 µm. A cell that starts 160 µm away feels only about 50 pN at first, but it drifts inward over the 2 mm approach until the force grows by roughly three orders of magnitude and it gets caught.</p>
           </div>
           <div>
             <h4>On the process</h4>
             <p>Limited compute pushed me to write my own analytical model. Cross-checking it against FEA taught me more about the physics than either would have alone.</p>
-            <p>The framework is a feasibility model. I also wrote a risk register covering shear-induced cell detachment and corrosion or leaching of the ferromagnetic material, and set out what would need to be true before experimental testing.</p>
+            <p>The main limitations are steady Poiseuille flow, a single-ring axial geometry, strut-aligned angular sampling and the absence of a shear-induced detachment model. Averaging over all angles would bring capture efficiency at middle cerebral artery conditions down to about 25%, which still indicates that magnetic stent retention of SPION-loaded cells is feasible under physiological flow.</p>
+            <p>The framework is a feasibility model and a quantitative foundation for design optimisation, not yet an experimentally validated one. I also wrote a risk register covering shear-induced cell detachment and corrosion or leaching of the ferromagnetic material, and set out what would need to be true before experimental testing.</p>
           </div>
         </div>
         <p class="note">This links directly to cell manufacturing: a delivery device only works if the cells arrive with consistent iron loading and viability. In my model, SPION loading per cell was one of the main factors controlling capture.</p>
@@ -377,7 +381,7 @@ html{scroll-behavior:smooth}
         <div>
           <p class="kicker">Group design-and-build project · Team of six</p>
           <h2>A bird-of-prey gripper with adjustable digit spread</h2>
-          <p class="sub">Raptors change how far apart their toes sit depending on what they grab. We built a four-digit, tendon-driven claw with a vernier mechanism to set the angle between digits, then tested whether that angle changes how much a gripped object deforms.</p>
+          <p class="sub">A bird-inspired robotic gripper designed to study how the angle of digit separation influences object deformation during grasping. We built a rigid, tendon-driven, 3D-printed claw, actuated by nylon tendons and compact DC gear motors, with a vernier mechanism for precise adjustment of digit angles.</p>
           <p class="docs"><a href="docs/Bird_of_Prey_Gripper_Report.pdf" target="_blank" rel="noopener">Group report <small>PDF · 11 MB · 12 pages</small></a></p>
         </div>
         <table class="tblock" aria-label="Project details">
@@ -466,7 +470,7 @@ html{scroll-behavior:smooth}
         <div class="cols">
           <div>
             <h4>The result</h4>
-            <p>We found no consistent link between digit angle and how much the object deformed. The claw worked as a mechanism, reaching TRL 4, but it couldn't produce the repeatable data needed to answer the question it was built for.</p>
+            <p>Tests on PLA and TPU substrates found no consistent relationship between digit-separation angle and substrate deformation. Our experiments provided insufficient and unreliable data, so we could not accept our hypothesis. Despite this, the prototype validated a functional biomimetic concept, reaching TRL 4, and sets out the groundwork for a gripper with improved actuation and sensing.</p>
             <h4 style="margin-top:20px">Why</h4>
             <ul class="plain">
               <li><strong>Not enough grip force.</strong> The N20 motors gave roughly 2.1 N per digit. Bird-inspired grippers in the literature need 64–86 N to hold securely, so the motors kept stalling.</li>
@@ -534,7 +538,7 @@ html{scroll-behavior:smooth}
         <div>
           <p class="kicker">Software project · Regulatory</p>
           <h2>An EU MDR device classifier you can try</h2>
-          <p class="sub">Describe a medical device and it predicts the risk class under Regulation (EU) 2017/745, shows which Annex VIII rules and clauses fired, what that class means for the route to market, and the standards usually used to show conformity. A language model only reads the description into structured attributes. The class comes from a rules engine I wrote against the regulation text and tested against the official MDCG worked examples.</p>
+          <p class="sub">Describe a medical device and it predicts the risk class under Regulation (EU) 2017/745, shows which Annex VIII rules and clauses fired, what that class means for the route to market, and the standards usually used to show conformity. Free text is only ever read into structured attributes, never into a class. The class comes from a rules engine I wrote against the regulation text and tested against the official MDCG worked examples.</p>
         </div>
         <table class="tblock" aria-label="Project details">
           <tr><td>Regulation</td><td>EU MDR 2017/745</td></tr>
@@ -546,10 +550,10 @@ html{scroll-behavior:smooth}
       </header>
 
       <div class="lead">
-        <figure class="plate"><img src="assets/mdr-flow.svg" alt="Diagram: a device description is turned into attributes by a language model or a form, then a rules engine applies Annex VIII rules 1 to 22 and outputs a class from I to III" loading="lazy" style="aspect-ratio:16/10;object-fit:cover"></figure>
+        <figure class="plate"><img src="assets/mdr-flow.svg" alt="Diagram: a device description is turned into attributes by a text reader or a form, then a rules engine applies Annex VIII rules 1 to 22 and outputs a class from I to III" loading="lazy" style="aspect-ratio:16/10;object-fit:cover"></figure>
         <div class="facts">
           <div class="fact"><div class="v">22<small> rules</small></div><div class="k">Every Annex VIII classification rule, each with tests built from named MDCG example devices</div></div>
-          <div class="fact"><div class="v">0<small> guesses</small></div><div class="k">The language model never picks the class. It fills in attributes, and you can inspect and change them</div></div>
+          <div class="fact"><div class="v">0<small> guesses</small></div><div class="k">Whatever reads your description never picks the class. It fills in attributes, and you can inspect and change them</div></div>
           <div class="fact"><div class="v">6,000<small> devices</small></div><div class="k">Random devices run through both the Python engine and the copy in this page, with identical results required</div></div>
         </div>
       </div>
@@ -574,7 +578,7 @@ html{scroll-behavior:smooth}
               <div class="mdr-chips" id="mdr-ex-text" aria-label="Example descriptions"></div>
               <div class="mdr-row">
                 <button type="button" class="mdr-go" id="mdr-run">Classify</button>
-                <label class="mdr-file">Optional photo or drawing <input type="file" id="mdr-img" accept="image/png,image/jpeg,image/webp"></label>
+                <label class="mdr-file" id="mdr-file" hidden>Optional photo or drawing <input type="file" id="mdr-img" accept="image/png,image/jpeg,image/webp"></label>
                 <span class="mdr-count" id="mdr-count">0 / 2000</span>
               </div>
               <p class="mdr-msg" style="margin-top:12px">Runs on a small server with a daily usage cap. If it's unavailable, the questions mode runs the same rules entirely in your browser.</p>
@@ -599,8 +603,9 @@ html{scroll-behavior:smooth}
       <section class="panel" role="tabpanel" id="p-r2" aria-labelledby="t-r2" hidden>
         <div class="cols">
           <div>
-            <h4>The model reads, the code decides</h4>
-            <p>Classification under the MDR is a legal test with a right answer for a given set of facts, so I didn't want a language model producing it. The model's job is narrow: read a description and fill in about 65 yes/no and multiple-choice attributes, such as how invasive the device is, how long it stays in the body and whether it is powered. Its output is forced into a fixed schema that has no field for a class.</p>
+            <h4>The reader extracts, the code decides</h4>
+            <p>Classification under the MDR is a legal test with a right answer for a given set of facts, so I didn't want a language model producing it. Reading the description is a separate, narrow job: fill in about 65 yes/no and multiple-choice attributes, such as how invasive the device is, how long it stays in the body and whether it is powered.</p>
+            <p>There are two readers behind the same interface. The live demo uses a keyword matcher built on the regulation's own defining vocabulary. A language-model reader is also built and tested, with its output forced into a fixed schema that has no field for a class; it is switched off here to keep the demo free to run.</p>
             <p>A separate rules engine takes those attributes and applies all 22 rules. Where several rules apply, Annex VIII says the strictest one wins, so the engine evaluates every rule and reports the highest class along with every rule that fired.</p>
             <p>Two more steps turn the class into something practical. One maps the device to the general safety and performance requirements in Annex I and the standards usually used for them, for example ISO 10993 for anything in contact with tissue and IEC 60601 for powered devices. The other lists what the class triggers under the regulation: the conformity assessment route in Article 52, how far a notified body is involved, whether a clinical investigation or expert panel is expected, and the post-market reports required.</p>
             <p>It also re-runs the rules with each stated fact removed in turn, to show which facts the class actually depends on.</p>
@@ -611,8 +616,8 @@ html{scroll-behavior:smooth}
               <tr><td>Source text</td><td>Annex VIII and Annex I from EUR-Lex, saved in the repository and quoted in each rule</td></tr>
               <tr><td>Ground truth</td><td>Named example devices from MDCG 2021-24, the official classification guidance, for all 22 rules</td></tr>
               <tr><td>Browser copy</td><td>Compared against the Python engine on 6,000 random devices in the test suite</td></tr>
-              <tr><td>Public server</td><td>Per-visitor rate limits, input size limits and a hard cap on model spend</td></tr>
-              <tr><td>If the model is off</td><td>Falls back to a keyword reader, then to the questions form</td></tr>
+              <tr><td>Public server</td><td>Per-visitor rate limits, input size limits and a hard cap on any model spend</td></tr>
+              <tr><td>If the server is down</td><td>The questions form runs the same rules in the browser</td></tr>
             </table>
             <p class="docs"><a href="https://github.com/SamLukaitis/medtech-classifier" target="_blank" rel="noopener">Source code <small>GitHub</small></a></p>
           </div>
@@ -629,7 +634,7 @@ html{scroll-behavior:smooth}
               <li>Some rules turn on judgement, such as whether a hazard is "potentially hazardous" or how serious a software error could be. The tool flags these instead of hiding them.</li>
               <li>The standards are the ones commonly used to show conformity. It doesn't check which editions are currently harmonised or pick device-specific parts.</li>
               <li>The route-to-market summary paraphrases the main articles. It leaves out custom-made and investigational devices and the transitional rules for older certificates.</li>
-              <li>The model can misread a description. That's why the attributes it extracted are shown and can be edited in the questions mode.</li>
+              <li>The keyword reader can miss or misread details in a description. That's why the attributes it extracted are shown and can be edited in the questions mode.</li>
             </ul>
           </div>
           <div>
@@ -904,8 +909,8 @@ html{scroll-behavior:smooth}
             if(!x.ok){fallbackLocal(text,x.status===429?'The demo server is rate-limiting requests from your connection. '+(x.j.error||''):'The server could not process that: '+(x.j.error||'request rejected')+'.'); return}
             var j=x.j, ex=j.extraction||{};
             render({cls:j.predicted_class,qualifiers:j.qualifiers||[],rules:j.triggered_rules||[],standards:standardsFrom((j.standards_mapping||{}).applicable_requirements||[]),
-              source:j.extractor==='llm'?'Attributes read from your description by a language model; class computed by the rules engine.':'Attributes read by a keyword matcher; class computed by the rules engine.',
-              banner:j.extractor==='llm'?null:(j.fallback_reason||'The language model was unavailable.')+' A simpler keyword reader was used, which misses more. Check the extracted answers.',
+              source:j.extractor==='llm'?'Attributes read from your description by a language model; class computed by the rules engine.':'Attributes read from your description by a keyword matcher; class computed by the rules engine. It can miss details, so check the extracted answers below.',
+              banner:null,
               pathway:j.regulatory_pathway,drivers:j.class_drivers,signals:ex.matched_signals,notes:(ex.unmatched_notes||[]).concat(ex.clarifying_questions||[]),attributes:j.attributes});
           }).catch(function(){fallbackLocal(text,'The demo server could not be reached.')})
             .then(function(){btn.disabled=false; btn.textContent='Classify'});
@@ -920,6 +925,8 @@ html{scroll-behavior:smooth}
         $('mdr-m-text').addEventListener('click',function(){setMode('text')});
         $('mdr-m-form').addEventListener('click',function(){setMode('form')});
         $('mdr-run').addEventListener('click',runRemote);
+        // Photos are only read by the language-model reader, so offer them only when it is switched on.
+        fetch(API+'/health').then(function(r){return r.json()}).then(function(h){if(h&&h.llm_enabled) $('mdr-file').hidden=false}).catch(function(){});
         $('mdr-desc').addEventListener('input',function(){$('mdr-count').textContent=this.value.length+' / 2000'});
         [['Hip replacement','A metal-on-polyethylene total hip joint replacement implant, supplied sterile.'],
          ['Insulin pump','A wearable insulin pump with a built-in continuous glucose sensor that automatically adjusts insulin delivery (closed loop).'],
@@ -944,7 +951,7 @@ html{scroll-behavior:smooth}
         <div>
           <p class="kicker">Written work · Medical device design</p>
           <h2>How coronary stents evolved, one failure at a time</h2>
-          <p class="sub">Two technical reviews: one on the mechanical design of drug-eluting stents, and one on how stent technology developed. Both argue that each new generation was engineered to fix the main way its predecessor failed.</p>
+          <p class="sub">Two technical reviews: a mechanical review of drug-eluting stent design, and an essay on the design evolution of coronary stents. Stent technology is an instructive case study in iterative biomechanical optimisation, with each generation engineered as a direct response to the dominant failure mode of its predecessor.</p>
           <p class="docs"><a href="docs/Lukaitis_Coronary_Stent_Evolution.pdf" target="_blank" rel="noopener">Design evolution essay <small>PDF · 0.3 MB</small></a><a href="docs/Lukaitis_Drug_Eluting_Stent_Review.pdf" target="_blank" rel="noopener">Drug-eluting stent review <small>PDF · 0.7 MB</small></a></p>
         </div>
         <table class="tblock" aria-label="Pieces">
@@ -992,7 +999,7 @@ html{scroll-behavior:smooth}
           </div>
           <div>
             <h4>Why I wrote them</h4>
-            <p>They gave me the device-design background behind my dissertation. A stent is a mechanical structure that also has to work with biology, and every design decision affects both.</p>
+            <p>They gave me the device-design background behind my dissertation. A stent is a mechanical structure that also has to work with biology, and every design decision affects both. At each stage, quantitative trade-offs between radial force, strut thickness, haemodynamics and biocompatibility constrained the design.</p>
           </div>
         </div>
         <div class="figs two">

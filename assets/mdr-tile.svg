@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Risk class ladder from I to III">
+  <rect width="600" height="600" fill="#FFFFFF"/>
+  <g fill="none" stroke="#D3DADF" stroke-width="1"><path d="M0 150H600M0 300H600M0 450H600M150 0V600M300 0V600M450 0V600"/></g>
+  <text x="60" y="78" font-family="'IBM Plex Mono',ui-monospace,Consolas,monospace" font-size="24" fill="#56656F" letter-spacing="2">MDR 2017/745 · ANNEX VIII</text>
+  <g font-family="Archivo,'Arial Narrow',Arial,sans-serif" font-weight="800" font-size="56">
+    <rect x="60" y="106" width="480" height="78" fill="#FFFFFF" stroke="#D3DADF" stroke-width="2"/><text x="86" y="165" fill="#9AA7B0">I</text>
+    <rect x="60" y="196" width="480" height="78" fill="#FFFFFF" stroke="#D3DADF" stroke-width="2"/><text x="86" y="255" fill="#9AA7B0">IIa</text>
+    <rect x="60" y="286" width="480" height="78" fill="#FFFFFF" stroke="#D3DADF" stroke-width="2"/><text x="86" y="345" fill="#9AA7B0">IIb</text>
+    <rect x="60" y="376" width="480" height="78" fill="#D2541E"/><text x="86" y="435" fill="#FFFFFF">III</text>
+  </g>
+  <text x="330" y="424" font-family="'IBM Plex Mono',ui-monospace,Consolas,monospace" font-size="24" fill="#FFFFFF" letter-spacing="2">RULE 8</text>
+</svg>
