@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sam Lukaitis · Engineering Portfolio</title>
+<meta name="description" content="Engineering portfolio of Sam Lukaitis: a ferromagnetic cerebral stent for cell therapy, a bird-of-prey robotic gripper, stent design reviews and Marlo.">
+<meta property="og:title" content="Sam Lukaitis · Engineering Portfolio">
+<meta property="og:description" content="Medical devices, simulation and hardware. Mechanical Engineering, University of Edinburgh.">
+<meta property="og:image" content="https://stanz1919.github.io/portfolio/assets/rings-dense.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23D2541E' stroke-width='4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<style>
+/* Layout: a drawing-sheet page. Sticky project index on the left, each project a "sheet" with a title block, a lead figure, and tabbed detail. */
+:root{
+  --paper:#F3F5F6; --sheet:#FFFFFF; --ink:#14212B; --muted:#56656F; --line:#D3DADF;
+  --cobalt:#2B5C8F; --heat:#D2541E; --plate:#FFFFFF; --chip:#E7ECEF;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0D1317; --sheet:#121A20; --ink:#E4EAEE; --muted:#93A2AC; --line:#26333C;
+  --cobalt:#82AEDD; --heat:#F0874D; --plate:#F7F8F9; --chip:#1C2730; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0D1317; --sheet:#121A20; --ink:#E4EAEE; --muted:#93A2AC; --line:#26333C;
+  --cobalt:#82AEDD; --heat:#F0874D; --plate:#F7F8F9; --chip:#1C2730; color-scheme:dark}
+
+*{box-sizing:border-box}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--cobalt)}
+:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px;padding-block:40px 80px}
+
+/* index */
+.index{position:sticky;top:calc(24px + env(safe-area-inset-top,0px));align-self:start;font-size:14px}
+.index .who{font-family:var(--display);font-weight:700;font-size:18px;line-height:1.2;margin-bottom:4px}
+.index .role{color:var(--muted);font-size:13px;margin-bottom:24px}
+.index ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--line)}
+.index a{display:block;padding:7px 0 7px 14px;margin-left:-1px;border-left:2px solid transparent;color:var(--muted);text-decoration:none}
+.index a:hover{color:var(--ink)}
+.index a.on{color:var(--ink);border-left-color:var(--heat);font-weight:500}
+.index .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin:0 0 8px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:center;padding-bottom:40px;border-bottom:1px solid var(--line)}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--display);font-stretch:80%;font-weight:800;font-size:clamp(40px,6vw,72px);line-height:.98;letter-spacing:-.01em;margin:0 0 20px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--heat)}
+.lede{font-size:18px;max-width:34em;margin:0 0 24px;color:var(--ink)}
+.hero figure{margin:0}
+.hero .plate{aspect-ratio:1/1;display:grid;place-items:center}
+.hero .plate img{width:88%}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.tools li{font-family:var(--mono);font-size:12px;background:var(--chip);padding:4px 10px;border-radius:3px}
+
+/* plates (figures on white, like printed figures) */
+.plate{background:var(--plate);border:1px solid var(--line);border-radius:2px;overflow:hidden;margin:0}
+.plate img{display:block;width:100%;height:auto}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.45}
+figcaption b{font-family:var(--mono);font-weight:500;color:var(--ink);font-size:12px}
+
+/* glance */
+.glance{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;padding-block:32px 8px}
+@media (max-width:1180px){.glance{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.glance a{display:grid;grid-template-rows:auto 1fr;gap:12px;color:inherit;text-decoration:none}
+.glance .thumb{aspect-ratio:16/10;background:var(--plate);border:1px solid var(--line);overflow:hidden}
+.glance .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.glance a:hover .thumb img{transform:scale(1.03)}
+.glance h3{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.2;margin:0 0 4px}
+.glance p{margin:0;font-size:14px;color:var(--muted)}
+.glance .num{font-family:var(--mono);font-size:13px;color:var(--heat);font-weight:500}
+
+/* project sheets */
+.sheet{background:var(--sheet);border:1px solid var(--line);margin-top:48px;scroll-margin-top:24px}
+.sheet-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;padding:28px 32px 24px;border-bottom:1px solid var(--line)}
+.sheet h2{font-family:var(--display);font-stretch:85%;font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1.05;margin:6px 0 10px;text-wrap:balance}
+.sheet .sub{margin:0;max-width:40em;color:var(--muted);font-size:17px}
+.tblock{border:1px solid var(--line);font-family:var(--mono);font-size:11.5px;border-collapse:collapse;align-self:start;min-width:220px}
+.tblock td{border:1px solid var(--line);padding:5px 9px;vertical-align:top}
+.tblock td:first-child{color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;white-space:nowrap}
+.lead{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0;border-bottom:1px solid var(--line)}
+.lead .plate{border:0;border-right:1px solid var(--line);border-radius:0}
+.lead .plate.dark{background:#000}
+.facts{padding:28px 32px;display:grid;gap:22px;align-content:start}
+.fact .v{font-family:var(--display);font-stretch:80%;font-weight:800;font-size:40px;line-height:1;color:var(--heat);font-variant-numeric:tabular-nums}
+.fact .v small{font-size:20px;font-weight:700;margin-left:2px}
+.fact .k{font-size:14px;color:var(--muted);margin-top:4px;max-width:28em}
+
+/* tabs */
+.tabs{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--line);padding:0 20px;scrollbar-width:thin}
+.tabs button{appearance:none;background:none;border:0;border-bottom:2px solid transparent;font:500 14px var(--body);color:var(--muted);
+  padding:14px 12px 12px;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--cobalt)}
+.panel{padding:28px 32px 32px}
+.panel>p,.panel li{max-width:42em}
+.panel h4{font-family:var(--display);font-weight:700;font-size:18px;margin:0 0 8px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.cols>div{min-width:0}
+.cols p{margin:0 0 12px}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:20px}
+.spec{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0 0}
+.spec td{border-top:1px solid var(--line);padding:7px 0;vertical-align:top}
+.spec td:first-child{color:var(--muted);width:42%;padding-right:12px}
+.spec td:last-child{font-family:var(--mono);font-size:13px}
+ul.plain{padding-left:18px;margin:0}
+ul.plain li{margin-bottom:6px}
+.note{border-left:2px solid var(--heat);padding:2px 0 2px 14px;margin:20px 0 0;color:var(--ink);max-width:42em}
+
+.viewer{width:100%;height:440px;background:radial-gradient(circle at 50% 40%,#3a3f45,#1a1d21);display:block;position:relative;cursor:grab;touch-action:pan-y}
+.viewer:active{cursor:grabbing}
+.viewer canvas{display:block;width:100%!important;height:100%!important}
+.viewer .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .4s}
+.viewer.ready .poster{opacity:0;pointer-events:none}
+.viewer .status{position:absolute;right:12px;top:10px;font-family:var(--mono);font-size:11px;color:#c9d0d6}
+.mv-wrap{position:relative;border:1px solid var(--line)}
+.mv-hint{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:11px;color:#c9d0d6;pointer-events:none}
+
+/* stent timeline */
+.timeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--ink);margin-top:8px}
+.timeline>div{padding:14px 16px 0 0;position:relative;min-width:0}
+.timeline>div::before{content:"";position:absolute;top:-7px;left:0;width:12px;height:12px;border-radius:50%;background:var(--sheet);border:2px solid var(--ink)}
+.timeline .yr{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.timeline h5{font-family:var(--display);font-size:17px;font-weight:700;margin:2px 0 8px}
+.timeline .fix,.timeline .fail{font-size:13.5px;line-height:1.45;margin:0 0 6px}
+.timeline .fix span,.timeline .fail span{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;display:block}
+.timeline .fix span{color:var(--cobalt)}
+.timeline .fail span{color:var(--heat)}
+.strut{display:block;margin:12px 0 4px;height:26px;width:100%}
+
+/* about */
+.about{margin-top:48px;padding-top:28px;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px}
+.about h2{font-family:var(--display);font-weight:800;font-size:28px;margin:0 0 10px}
+.about p{margin:0 0 12px;max-width:36em}
+
+@media (max-width:1000px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:0;padding-top:0}
+  .index{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line)}
+  .index .who,.index .role,.index .lbl{display:none}
+  .index ol{display:flex;gap:4px;border:0;overflow-x:auto}
+  .index a{border:0;border-bottom:2px solid transparent;padding:6px 10px;white-space:nowrap}
+  .index a.on{border-bottom-color:var(--heat)}
+  .hero{padding-top:32px}
+}
+@media (max-width:760px){
+  .hero,.lead,.cols,.about{grid-template-columns:minmax(0,1fr)}
+  .hero .plate{aspect-ratio:auto}
+  .glance{grid-template-columns:minmax(0,1fr)}
+  .lead .plate{border-right:0;border-bottom:1px solid var(--line)}
+  .sheet-head{grid-template-columns:minmax(0,1fr);padding:22px 18px}
+  .facts,.panel{padding:22px 18px}
+  .tabs{padding:0 6px}
+  .timeline{grid-template-columns:minmax(0,1fr);border-top:0;border-left:2px solid var(--ink);margin-left:6px}
+  .timeline>div{padding:0 0 18px 20px}
+  .timeline>div::before{top:2px;left:-7px}
+  .viewer{height:340px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="index" aria-label="Portfolio sections">
+    <div class="who">Sam Lukaitis</div>
+    <div class="role">BEng Mechanical Engineering, First Class<br>University of Edinburgh</div>
+    <p class="lbl">Contents</p>
+    <ol>
+      <li><a href="#top">Overview</a></li>
+      <li><a href="#stent">Magnetic cerebral stent</a></li>
+      <li><a href="#claw">Bird-of-prey gripper</a></li>
+      <li><a href="#reviews">Stent design reviews</a></li>
+      <li><a href="#marlo">Marlo (side project)</a></li>
+      <li><a href="#about">About</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section id="top" class="hero">
+      <div>
+        <p class="kicker">Engineering portfolio · 2025–26</p>
+        <h1>Getting therapeutic cells to <em>stay where they're needed.</em></h1>
+        <p class="lede">I'm a mechanical engineering graduate from Edinburgh. My dissertation asked whether a magnetised stent could catch and hold cells for cell therapy in the brain. I also like building physical things that move, like the robotic claw further down.</p>
+        <ul class="tools" aria-label="Tools">
+          <li>COMSOL Multiphysics</li><li>Python (NumPy/SciPy)</li><li>Onshape CAD</li><li>FEA</li><li>FDM printing · PLA/TPU</li><li>Arduino</li><li>EU/UK MDR</li>
+        </ul>
+      </div>
+      <figure>
+        <div class="plate"><img src="assets/rings-dense.webp" alt="Heatmap of magnetic field gradient around a ring of stent struts, showing bright capture zones around each strut" width="757" height="720"></div>
+        <figcaption><b>FIG.</b> Where cells get caught. Field-gradient magnitude |∇|B|| around the 18-cell stent (V3) at 1.5 T, above a 100 T/m threshold. From my COMSOL model.</figcaption>
+      </figure>
+    </section>
+
+    <div class="glance">
+      <a href="#stent">
+        <div class="thumb"><img src="assets/comsol-close.webp" alt="" loading="lazy"></div>
+        <div><span class="num">Dissertation · 2026</span><h3>Ferromagnetic cerebral stent</h3><p>COMSOL and a Python model built from scratch, agreeing to within 1%.</p></div>
+      </a>
+      <a href="#claw">
+        <div class="thumb"><img src="assets/render-grip.webp" alt="" loading="lazy" style="object-position:40% 50%"></div>
+        <div><span class="num">Group build · 2025</span><h3>Bird-of-prey gripper</h3><p>Tendon-driven, 3D-printed claw with adjustable digit spread from 29° to 88°.</p></div>
+      </a>
+      <a href="#reviews">
+        <div class="thumb"><img src="assets/comsol-stent.webp" alt="" loading="lazy" style="object-position:50% 40%"></div>
+        <div><span class="num">Written work · 2026</span><h3>Stent design reviews</h3><p>Fifty years of coronary stents, read as a series of engineering fixes.</p></div>
+      </a>
+      <a href="#marlo">
+        <div class="thumb"><img src="assets/marlo-cover.webp" alt="" loading="lazy" style="object-position:70% 50%"></div>
+        <div><span class="num">Side project · 2026</span><h3>Marlo</h3><p>AI assistant over WhatsApp and SMS, in testing with ~10 users.</p></div>
+      </a>
+    </div>
+
+    <!-- ========== STENT ========== -->
+    <article id="stent" class="sheet">
+      <header class="sheet-head">
+        <div>
+          <p class="kicker">Individual dissertation · MECE10008</p>
+          <h2>A ferromagnetic cerebral stent that holds therapeutic cells in place</h2>
+          <p class="sub">Cell therapies for neurological disease often fail because the cells don't reach the target, or don't stay there. I tested whether a stent, magnetised by an MRI scanner's 1.5 T field, could pull iron-oxide-labelled cells out of blood flow and keep them close to the vessel wall.</p>
+        </div>
+        <table class="tblock" aria-label="Project details">
+          <tr><td>Date</td><td>Jan–Apr 2026</td></tr>
+          <tr><td>Supervisor</td><td>Alistair Elfick</td></tr>
+          <tr><td>Scope</td><td>Self-proposed</td></tr>
+          <tr><td>Tools</td><td>COMSOL, Python</td></tr>
+        </table>
+      </header>
+
+      <div class="lead">
+        <figure class="plate"><img src="assets/comsol-stent.webp" alt="COMSOL plot of magnetic flux density along a diamond-cell stent" loading="lazy"></figure>
+        <div class="facts">
+          <div class="fact"><div class="v">&lt;1<small>%</small></div><div class="k">Agreement between my COMSOL FEA and my analytical Python model across the capture zone</div></div>
+          <div class="fact"><div class="v">13.9<small>×</small></div><div class="k">How much the standard static force-balance test underestimates capture at healthy cerebral flow (0.6 m/s)</div></div>
+          <div class="fact"><div class="v">256<small> µm</small></div><div class="k">Maximum predicted capture range from the strut surface, at 200 pg iron oxide per cell</div></div>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Stent project detail">
+        <button role="tab" id="t-s1" aria-controls="p-s1" aria-selected="true">The problem</button>
+        <button role="tab" id="t-s2" aria-controls="p-s2" aria-selected="false" tabindex="-1">Stent geometry</button>
+        <button role="tab" id="t-s3" aria-controls="p-s3" aria-selected="false" tabindex="-1">Simulation</button>
+        <button role="tab" id="t-s4" aria-controls="p-s4" aria-selected="false" tabindex="-1">Results</button>
+        <button role="tab" id="t-s5" aria-controls="p-s5" aria-selected="false" tabindex="-1">What I learned</button>
+      </div>
+
+      <section class="panel" role="tabpanel" id="p-s1" aria-labelledby="t-s1">
+        <div class="cols">
+          <div>
+            <p>Stem cells and engineered cells can release signals that help repair damaged brain tissue, but the blood–brain barrier and fast arterial flow mean very few injected cells end up where they are needed.</p>
+            <p>The idea: label the cells with superparamagnetic iron-oxide nanoparticles (SPIONs), put a ferromagnetic stent in the artery feeding the target region, and let the patient's MRI field magnetise it. Steep field gradients next to each strut pull passing cells towards the wall.</p>
+            <p>I started out looking at whether magnets could push cells through tissue. The literature ruled that out early, so I narrowed the project to one measurable question: <strong>how far from the stent can a cell be and still get caught?</strong> That distance decides whether captured cells sit close enough for their signals to reach the tissue.</p>
+          </div>
+          <div>
+            <table class="spec" aria-label="Model conditions">
+              <tr><td>External field</td><td>1.5 T (clinical MRI)</td></tr>
+              <tr><td>Target vessel</td><td>Middle cerebral artery, ~2.7 mm</td></tr>
+              <tr><td>Cell label</td><td>SPIONs, 200 pg per cell (reference)</td></tr>
+              <tr><td>Flow speeds</td><td>0.02 to 0.6 m/s mean</td></tr>
+              <tr><td>Geometries</td><td>4 stent designs, 6 to 18 cells</td></tr>
+              <tr><td>Methods</td><td>FEA, Akoun–Yonnet analytical field, trajectory ODEs</td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-s2" aria-labelledby="t-s2" hidden>
+        <div class="cols">
+          <div>
+            <p>I modelled four diamond-cell stents in CAD, keeping strut width and thickness at 80 µm. That's in the range used clinically to avoid disturbing flow. Only the number of cells around the circumference changed.</p>
+            <p>The geometry has to tile exactly around the tube. Cell width is the circumference divided by the number of columns (W = πD / n), and alternate rings are offset by half a cell axially and circumferentially so the struts interlock. I worked these out by hand before building each version.</p>
+          </div>
+          <figure><div class="plate"><img src="assets/cell-dims.webp" alt="Dimensioned sketch of a single diamond stent cell" loading="lazy"></div><figcaption><b>FIG.</b> Dimensioning one cell from my design notes: 0.08 mm struts, 1.535 mm tip to tip.</figcaption></figure>
+        </div>
+        <figure style="margin-top:24px"><div class="plate"><img src="assets/geometries.webp" alt="Four stent geometries with 6, 10, 12 and 18 closed cells" loading="lazy" style="max-width:560px;margin:0 auto"></div><figcaption><b>FIG.</b> The four designs: (a) 6, (b) 10, (c) 12 and (d) 18 closed cells.</figcaption></figure>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-s3" aria-labelledby="t-s3" hidden>
+        <div class="cols">
+          <div>
+            <p>I solved the magnetostatics in COMSOL Multiphysics to get the flux density and its gradient around each stent. Fine meshes on 80 µm struts are expensive, so I couldn't run every parameter sweep in COMSOL.</p>
+            <p>To get around that, I wrote an analytical model in Python based on the Akoun–Yonnet expression for a magnetised rectangular block, treating each strut as a block. It matched COMSOL to within 1% over the region that matters, which let me run large sweeps quickly.</p>
+            <p>On top of the field model I added a trajectory solver. It follows individual cells through the artery as magnetic force and fluid drag act on them, instead of only comparing the two forces at a single point.</p>
+          </div>
+          <figure><div class="plate"><img src="assets/validation.webp" alt="Bar chart comparing code and COMSOL threshold-crossing distances" loading="lazy"></div><figcaption><b>FIG.</b> Threshold-crossing distances from my Python code against COMSOL at 40, 100 and 300 T/m.</figcaption></figure>
+        </div>
+        <div class="figs">
+          <figure><div class="plate"><img src="assets/comsol-close.webp" alt="Close-up COMSOL plot of strut junctions" loading="lazy"></div><figcaption><b>FIG.</b> Flux density concentrates at strut junctions.</figcaption></figure>
+          <figure><div class="plate"><img src="assets/comsol-ring.webp" alt="End-on COMSOL view of the stent" loading="lazy"></div><figcaption><b>FIG.</b> End-on view of the 12-cell stent at 1.5 T.</figcaption></figure>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-s4" aria-labelledby="t-s4" hidden>
+        <div class="cols">
+          <div>
+            <ul class="plain">
+              <li><strong>Capture range of 36–256 µm</strong> from the strut surface, depending on flow speed and SPION loading.</li>
+              <li><strong>Capture efficiency fell from 100% to 35%</strong> as mean flow rose from 0.02 to 0.6 m/s.</li>
+              <li><strong>The static test is misleading.</strong> The usual |F<sub>mag</sub>| &gt; |F<sub>drag</sub>| check underestimates capture by 13.9× because cells drift towards the wall gradually as they travel along the stent.</li>
+              <li><strong>Strut count doesn't change reach.</strong> The gradient falls off as a power law (exponent about −1.25 to −1.34) whatever the number of struts. Strut geometry and magnetisation set the range; strut count sets how evenly the circumference is covered.</li>
+            </ul>
+          </div>
+          <figure><div class="plate"><img src="assets/gradient.webp" alt="Log-log plot of gradient against distance from strut, COMSOL and analytical" loading="lazy"></div><figcaption><b>FIG.</b> Gradient decay away from the strut: COMSOL points against analytical curves.</figcaption></figure>
+        </div>
+        <div class="figs">
+          <figure><div class="plate"><img src="assets/rings-6.webp" alt="Capture zones for 6-cell stent" loading="lazy"></div><figcaption><b>V1 · 6 cells.</b> Zones stay isolated around each strut.</figcaption></figure>
+          <figure><div class="plate"><img src="assets/rings-12.webp" alt="Capture zones for 12-cell stent at 300 T/m" loading="lazy"></div><figcaption><b>V2 · 12 cells, 300 T/m.</b> Only the strongest region near each strut remains.</figcaption></figure>
+          <figure><div class="plate"><img src="assets/rings-dense.webp" alt="Capture zones for 18-cell stent" loading="lazy"></div><figcaption><b>V3 · 18 cells.</b> Neighbouring zones merge, with null gaps between some struts.</figcaption></figure>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-s5" aria-labelledby="t-s5" hidden>
+        <div class="cols">
+          <div>
+            <h4>Technical</h4>
+            <p>The biggest finding was about method. At typical post-stenosis conditions (200 pg, 0.2 m/s), the static force balance predicted a capture range of 36 µm, which would have suggested the device can't work. Tracking each cell along its path gave 131 µm. A cell that starts 160 µm away feels only about 50 pN at first, but it drifts inward over the 2 mm approach until the force grows by roughly three orders of magnitude and it gets caught.</p>
+          </div>
+          <div>
+            <h4>On the process</h4>
+            <p>Limited compute pushed me to write my own analytical model. Cross-checking it against FEA taught me more about the physics than either would have alone.</p>
+            <p>The framework is a feasibility model. I also wrote a risk register covering shear-induced cell detachment and corrosion or leaching of the ferromagnetic material, and set out what would need to be true before experimental testing.</p>
+          </div>
+        </div>
+        <p class="note">This links directly to cell manufacturing: a delivery device only works if the cells arrive with consistent iron loading and viability. In my model, SPION loading per cell was one of the main factors controlling capture.</p>
+      </section>
+    </article>
+
+    <!-- ========== CLAW ========== -->
+    <article id="claw" class="sheet">
+      <header class="sheet-head">
+        <div>
+          <p class="kicker">Group design-and-build project · Team of six</p>
+          <h2>A bird-of-prey gripper with adjustable digit spread</h2>
+          <p class="sub">Raptors change how far apart their toes sit depending on what they grab. We built a four-digit, tendon-driven claw with a vernier mechanism to set the angle between digits, then tested whether that angle changes how much a gripped object deforms.</p>
+        </div>
+        <table class="tblock" aria-label="Project details">
+          <tr><td>Date</td><td>Nov 2025</td></tr>
+          <tr><td>Supervisor</td><td>Dr Parvez Alam</td></tr>
+          <tr><td>CAD</td><td>Onshape</td></tr>
+          <tr><td>Build</td><td>FDM, PLA + TPU</td></tr>
+          <tr><td>Control</td><td>Arduino Uno</td></tr>
+        </table>
+      </header>
+
+      <div class="lead">
+        <figure class="plate dark"><img src="assets/render-grip.webp" alt="Render of the claw gripping a cylinder" loading="lazy" style="aspect-ratio:4/3;object-fit:cover;object-position:42% 50%"></figure>
+        <div class="facts">
+          <div class="fact"><div class="v">29–88<small>°</small></div><div class="k">Digit-separation range, set precisely with a vernier mechanism in the palm</div></div>
+          <div class="fact"><div class="v">298<small>:1</small></div><div class="k">N20 gear motors driving nylon tendons on printed TPU spools</div></div>
+          <div class="fact"><div class="v">4<small> digits</small></div><div class="k">Anisodactyl layout like a raptor's foot: three forward, one back</div></div>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Gripper project detail">
+        <button role="tab" id="t-c1" aria-controls="p-c1" aria-selected="true">3D model</button>
+        <button role="tab" id="t-c2" aria-controls="p-c2" aria-selected="false" tabindex="-1">Mechanism</button>
+        <button role="tab" id="t-c3" aria-controls="p-c3" aria-selected="false" tabindex="-1">Build &amp; electronics</button>
+        <button role="tab" id="t-c4" aria-controls="p-c4" aria-selected="false" tabindex="-1">Testing</button>
+        <button role="tab" id="t-c5" aria-controls="p-c5" aria-selected="false" tabindex="-1">What went wrong</button>
+      </div>
+
+      <section class="panel" role="tabpanel" id="p-c1" aria-labelledby="t-c1">
+        <div class="mv-wrap">
+          <div id="claw-viewer" class="viewer" role="img" aria-label="Interactive 3D model of the full claw assembly"><img class="poster" src="assets/render-top.webp" alt=""><span class="status">Loading 3D model…</span></div>
+          <span class="mv-hint">Drag to rotate · scroll or pinch to zoom</span>
+        </div>
+        <p style="margin-top:14px;color:var(--muted);font-size:14px">The full Onshape assembly: printed digits and palm, N20 motors, Arduino Uno, fasteners and heat-set inserts. Simplified from 1.6M triangles so it loads in a browser.</p>
+        <div class="figs">
+          <figure><div class="plate dark" style="background:#000"><img src="assets/render-front.webp" alt="Front render of the claw gripping a pipe" loading="lazy"></div></figure>
+          <figure><div class="plate" style="background:#3a3a3a"><img src="assets/render-open.webp" alt="Top-down render of the claw with digits spread" loading="lazy"></div></figure>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-c2" aria-labelledby="t-c2" hidden>
+        <div class="cols">
+          <div>
+            <p>Each digit has three phalanges joined by pins. A flexor tendon runs along the inside to curl the digit, and a torsional spring at each joint returns it. Mechanical stops limit how far each joint can bend.</p>
+            <p>Tendons run inside the leg so the motors can sit up by the "ankle", away from the gripping area. The palm holds the vernier plate, which sets the spread between digits in fine, repeatable steps so each test angle can be reproduced exactly.</p>
+          </div>
+          <figure><div class="plate"><img src="assets/digit-design.webp" alt="Labelled digit design showing phalanges, tendon pin and torsional spring" loading="lazy"></div><figcaption><b>FIG.</b> Digit design: phalanges, tendon pin, torsional spring and mechanical stop.</figcaption></figure>
+        </div>
+        <div class="figs">
+          <figure><div class="plate"><img src="assets/digit-angle.webp" alt="Claw shown at 29 and 88 degree digit separation" loading="lazy"></div><figcaption><b>FIG.</b> Digit separation set from 29° to 88°.</figcaption></figure>
+          <figure><div class="plate"><img src="assets/routing.webp" alt="Transparent leg showing internal tendon routing" loading="lazy" style="max-height:420px;object-fit:contain"></div><figcaption><b>FIG.</b> Tendons routed through the leg.</figcaption></figure>
+          <figure><div class="plate"><img src="assets/exploded.webp" alt="Exploded view of a digit segment" loading="lazy" style="max-height:420px;object-fit:contain"></div><figcaption><b>FIG.</b> Exploded phalanx: printed plates, spacers, bolts.</figcaption></figure>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-c3" aria-labelledby="t-c3" hidden>
+        <div class="cols">
+          <figure><div class="plate"><img src="assets/build-photo.webp" alt="Photo of the built claw mounted in an aluminium test frame" loading="lazy" style="max-height:560px;object-fit:cover"></div><figcaption><b>PHOTO.</b> The finished prototype in its test frame.</figcaption></figure>
+          <div>
+            <p>Structural parts were printed in PLA. Motor spools were printed in TPU (shore 68D), which is tough enough not to crack on the motor's D-shaft. Heat-set M3 inserts let the motor covers, palm and Arduino bolt onto the leg and come off again.</p>
+            <table class="spec" aria-label="Electrical system">
+              <tr><td>Controller</td><td>Arduino Uno</td></tr>
+              <tr><td>Motor driver</td><td>L298N dual H-bridge, PWM</td></tr>
+              <tr><td>Motors</td><td>N20, 6 V, 298:1, 3.3 kg·cm stall</td></tr>
+              <tr><td>Force sensing</td><td>Interlink 402 FSR, 0.1–10 N</td></tr>
+              <tr><td>Tendons</td><td>Nylon</td></tr>
+            </table>
+            <p style="margin-top:16px">Before printing, we ran a static FEA on the most loaded part to check PLA was strong enough. Peak von Mises stress was about 17 MPa, well below PLA's strength.</p>
+            <figure><div class="plate"><img src="assets/fea.webp" alt="Von Mises stress plot of a claw component" loading="lazy"></div></figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-c4" aria-labelledby="t-c4" hidden>
+        <div class="cols">
+          <div>
+            <p>We mounted the claw above hollow cylinders made of rigid PLA and flexible TPU, closed it at a range of digit-separation angles, and measured the change in cylinder diameter as a stand-in for how hard it was gripping.</p>
+            <p>The aluminium-extrusion frame held the claw and specimen in the same position for every run, so the separation angle was the only thing changing.</p>
+          </div>
+          <figure><div class="plate"><img src="assets/rig.webp" alt="Render of the test rig with claw above a cylinder" loading="lazy" style="max-height:440px;object-fit:contain"></div><figcaption><b>FIG.</b> Test rig layout.</figcaption></figure>
+        </div>
+        <figure style="margin-top:20px;max-width:620px"><div class="plate"><img src="assets/results.webp" alt="Scatter plot of change in cylinder diameter against claw rotation angle" loading="lazy"></div><figcaption><b>FIG.</b> Change in cylinder diameter against digit-separation angle, for white and black cylinders.</figcaption></figure>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-c5" aria-labelledby="t-c5" hidden>
+        <div class="cols">
+          <div>
+            <h4>The result</h4>
+            <p>We found no consistent link between digit angle and how much the object deformed. The claw worked as a mechanism, reaching TRL 4, but it couldn't produce the repeatable data needed to answer the question it was built for.</p>
+            <h4 style="margin-top:20px">Why</h4>
+            <ul class="plain">
+              <li><strong>Not enough grip force.</strong> The N20 motors gave roughly 2.1 N per digit. Bird-inspired grippers in the literature need 64–86 N to hold securely, so the motors kept stalling.</li>
+              <li><strong>Tendon friction.</strong> Routing tendons through the digits costs efficiency, by up to 37% in similar systems. The first phalanx also needed a disproportionate share of force before the outer joints started to close.</li>
+              <li><strong>Test geometry.</strong> Above 44° separation, digits II and IV barely touched the cylinder.</li>
+              <li><strong>Tolerance.</strong> The vernier was locked with an M2.5 bolt in clearance holes, which left about ±1° of play.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>What we'd change</h4>
+            <ul class="plain">
+              <li>Test on a sphere, so every digit contacts the object at every angle.</li>
+              <li>Make the claw larger so it can take an extensor tendon and bigger joint diameters for more mechanical advantage.</li>
+              <li>Use higher torque-density motors with encoders: coreless or brushless motors give 2–3× the power in the same size.</li>
+              <li>Lock the vernier with a dowel pin instead of a bolt.</li>
+            </ul>
+            <p class="note">The prototype was small to keep within a tight budget and timeline, and those compromises explain most of the failure. Tracing a null result back to specific design decisions was the most useful part of the project.</p>
+          </div>
+        </div>
+      </section>
+    </article>
+
+    <!-- ========== REVIEWS ========== -->
+    <article id="reviews" class="sheet">
+      <header class="sheet-head">
+        <div>
+          <p class="kicker">Written work · Medical device design</p>
+          <h2>How coronary stents evolved, one failure at a time</h2>
+          <p class="sub">Two technical reviews: one on the mechanical design of drug-eluting stents, and one on how stent technology developed. Both argue that each new generation was engineered to fix the main way its predecessor failed.</p>
+        </div>
+        <table class="tblock" aria-label="Pieces">
+          <tr><td>Piece 1</td><td>Mechanical review of DES design</td></tr>
+          <tr><td>Piece 2</td><td>Design evolution of coronary stents (DSTIMD4)</td></tr>
+          <tr><td>Year</td><td>2026</td></tr>
+        </table>
+      </header>
+      <div class="panel">
+        <div class="timeline" role="list">
+          <div role="listitem">
+            <div class="yr">1977</div><h5>Balloon angioplasty</h5>
+            <svg class="strut" viewBox="0 0 120 26" aria-hidden="true"><ellipse cx="60" cy="13" rx="50" ry="9" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            <p class="fix"><span>Solved</span>Opening a blocked artery without open surgery.</p>
+            <p class="fail"><span>Failed by</span>Elastic recoil. The artery springs back.</p>
+          </div>
+          <div role="listitem">
+            <div class="yr">1987</div><h5>Bare-metal stent</h5>
+            <svg class="strut" viewBox="0 0 120 26" aria-hidden="true"><path d="M4 13 L19 3 L34 13 L49 3 L64 13 L79 3 L94 13 L109 3 M4 13 L19 23 L34 13 L49 23 L64 13 L79 23 L94 13 L109 23" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+            <p class="fix"><span>Solved</span>Recoil, with a 316L steel scaffold.</p>
+            <p class="fail"><span>Failed by</span>In-stent restenosis from tissue regrowth.</p>
+          </div>
+          <div role="listitem">
+            <div class="yr">2000s</div><h5>Drug-eluting stent</h5>
+            <svg class="strut" viewBox="0 0 120 26" aria-hidden="true"><path d="M4 13 L19 3 L34 13 L49 3 L64 13 L79 3 L94 13 L109 3 M4 13 L19 23 L34 13 L49 23 L64 13 L79 23 L94 13 L109 23" fill="none" stroke="currentColor" stroke-width="1.2"/><g fill="currentColor" opacity=".45"><circle cx="19" cy="3" r="2"/><circle cx="49" cy="23" r="2"/><circle cx="79" cy="3" r="2"/><circle cx="34" cy="13" r="2"/><circle cx="94" cy="13" r="2"/></g></svg>
+            <p class="fix"><span>Solved</span>Restenosis. A sirolimus coating cut repeat procedures to about 5%, and CoCr alloys allowed 80–90 µm struts.</p>
+            <p class="fail"><span>Failed by</span>Polymer inflammation and delayed healing, causing late thrombosis. A permanent metal cage also stays in the artery.</p>
+          </div>
+          <div role="listitem">
+            <div class="yr">2011</div><h5>Bioresorbable scaffold</h5>
+            <svg class="strut" viewBox="0 0 120 26" aria-hidden="true"><path d="M4 13 L19 3 L34 13 L49 3 L64 13 L79 3 L94 13 L109 3 M4 13 L19 23 L34 13 L49 23 L64 13 L79 23 L94 13 L109 23" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/></svg>
+            <p class="fix"><span>Solved</span>The permanent implant: a PLLA scaffold that dissolves.</p>
+            <p class="fail"><span>Failed by</span>PLLA's low stiffness, which forced ~157 µm struts. Device thrombosis was 2.2% vs 1.0% for metal.</p>
+          </div>
+        </div>
+        <div class="cols" style="margin-top:32px">
+          <div>
+            <h4>What the reviews cover</h4>
+            <ul class="plain">
+              <li>Stent categories, materials (316L, CoCr, PtCr, PLLA) and how they trade off strength against strut thickness.</li>
+              <li>Performance metrics: recoil, foreshortening, dogboning, bending flexibility and longitudinal resistance, with their defining formulas.</li>
+              <li>Analytical models of drug release from the polymer coating into tissue.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Why I wrote them</h4>
+            <p>They gave me the device-design background behind my dissertation. A stent is a mechanical structure that also has to work with biology, and every design decision affects both.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ========== MARLO ========== -->
+    <article id="marlo" class="sheet">
+      <header class="sheet-head">
+        <div>
+          <p class="kicker">Side project · Founder</p>
+          <h2>Marlo, an AI assistant that lives in your messaging apps</h2>
+          <p class="sub">It started as a tool for a friend's dad, who was buried in emails and admin. Marlo handles planning, email and paperwork over WhatsApp, SMS, email and the web, so people who aren't confident with apps can get help without installing anything new.</p>
+        </div>
+        <table class="tblock" aria-label="Project details">
+          <tr><td>Status</td><td>Invite-only test</td></tr>
+          <tr><td>Users</td><td>~10 active</td></tr>
+          <tr><td>Stack</td><td>TypeScript, React, Vite</td></tr>
+          <tr><td>Live</td><td><a href="https://marlowe.up.railway.app/" target="_blank" rel="noopener">marlowe.up.railway.app</a></td></tr>
+        </table>
+      </header>
+
+      <div class="lead">
+        <figure class="plate"><img src="assets/marlo-cover.webp" alt="Marlo pitch deck cover showing a WhatsApp conversation with the assistant" loading="lazy"></figure>
+        <div class="facts">
+          <div class="fact"><div class="v">~10<small> users</small></div><div class="k">Early testers using it day to day and feeding back on what to build next</div></div>
+          <div class="fact"><div class="v">4<small> channels</small></div><div class="k">WhatsApp, SMS, email and web, all from one backend</div></div>
+          <div class="fact"><div class="v">0<small> scraping</small></div><div class="k">Every integration goes through official APIs or MCP</div></div>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Marlo detail">
+        <button role="tab" id="t-m1" aria-controls="p-m1" aria-selected="true">What it does</button>
+        <button role="tab" id="t-m2" aria-controls="p-m2" aria-selected="false" tabindex="-1">How it's built</button>
+        <button role="tab" id="t-m3" aria-controls="p-m3" aria-selected="false" tabindex="-1">Why it's relevant</button>
+      </div>
+
+      <section class="panel" role="tabpanel" id="p-m1" aria-labelledby="t-m1">
+        <figure><div class="plate"><img src="assets/marlo-solution.webp" alt="Slide showing Marlo coordinating calendar, maps and email from one message" loading="lazy"></div><figcaption><b>SLIDE.</b> One message replaces five apps and nine switches.</figcaption></figure>
+        <figure style="margin-top:20px"><div class="plate"><img src="assets/marlo-features.webp" alt="Slide listing Marlo's working features" loading="lazy"></div><figcaption><b>SLIDE.</b> Working today: email across inboxes, reminders, receipts to Xero, document storage, daily briefings and more.</figcaption></figure>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-m2" aria-labelledby="t-m2" hidden>
+        <div class="cols">
+          <div>
+            <p><strong>The language model is only the interface.</strong> Every action Marlo takes goes through a real, hard-coded tool, so it can't make up results. I used the same split in my MDR classifier: the model reads the input and deterministic code makes the decisions.</p>
+            <p><strong>Privacy by design.</strong> Each user has their own encrypted database and key. Users can delete anything with one message, and training on their data is opt-in.</p>
+            <p><strong>It learns from its gaps.</strong> Any request Marlo can't handle is logged anonymously, and that log decides what gets built next.</p>
+          </div>
+          <figure><div class="plate"><img src="assets/marlo-principles.webp" alt="Slide showing Marlo's four principles: personal, robust, private, seamless" loading="lazy"></div></figure>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="p-m3" aria-labelledby="t-m3" hidden>
+        <p>Marlo isn't a medical device, but building it taught me things a device project needs: scoping a product to what users actually need, designing systems that are safe to rely on, and handling data protection and compliance from the start rather than at the end.</p>
+        <p>It's also where I got hands-on with LLM tool-calling, which I'm now applying to medical device regulation.</p>
+      </section>
+    </article>
+
+    <section id="about" class="about">
+      <div>
+        <h2>About</h2>
+        <p>I'm Sam, a mechanical engineer from the University of Edinburgh. I'm most interested in the point where hardware meets biology: devices, tools and processes that make cell and gene therapies work outside the lab.</p>
+        <p>I like problems that need both a model and something built. If a simulation says one thing and a prototype says another, I want to find out why.</p>
+      </div>
+      <div>
+        <table class="spec" aria-label="Summary">
+          <tr><td>Degree</td><td>BEng (Hons) Mechanical Engineering, First Class, Univ. of Edinburgh</td></tr>
+          <tr><td>Coursework</td><td>Surgical tools &amp; implanted devices; biomaterials; bio-inspired engineering</td></tr>
+          <tr><td>Regulatory</td><td>EU/UK MDR (2017/745), ISO standards</td></tr>
+          <tr><td>Simulation</td><td>COMSOL, FEA, Python (ODEs, parametric sweeps)</td></tr>
+          <tr><td>Design</td><td>Onshape, rendering, design for 3D printing</td></tr>
+          <tr><td>Hardware</td><td>Arduino, motor drivers, FSR sensing</td></tr>
+          <tr><td>Interest</td><td>Medical devices, cell therapy manufacturing</td></tr>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  // Tabs
+  document.querySelectorAll('[role="tablist"]').forEach(function(list){
+    var tabs=[].slice.call(list.querySelectorAll('[role="tab"]'));
+    function select(tab,focus){
+      tabs.forEach(function(t){
+        var on=t===tab; t.setAttribute('aria-selected',on); t.tabIndex=on?0:-1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden=!on;
+      });
+      if(focus) tab.focus();
+      window.dispatchEvent(new Event('resize'));
+    }
+    tabs.forEach(function(t,i){
+      t.addEventListener('click',function(){select(t)});
+      t.addEventListener('keydown',function(e){
+        if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();var n=tabs[(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length];select(n,true)}
+      });
+    });
+  });
+  // Contents highlight
+  var links=[].slice.call(document.querySelectorAll('.index a'));
+  var map={}; links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ links.forEach(function(a){a.classList.remove('on')}); var a=map[e.target.id]; if(a){a.classList.add('on'); if(a.scrollIntoView && window.innerWidth<=1000){try{a.parentNode.parentNode.scrollLeft=a.offsetLeft-20}catch(_){}}} } });
+    },{rootMargin:'-35% 0px -60% 0px'});
+    Object.keys(map).forEach(function(id){var el=document.getElementById(id); if(el) io.observe(el)});
+  }
+  links[0].classList.add('on');
+})();
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const box = document.getElementById('claw-viewer');
+const status = box.querySelector('.status');
+let started = false;
+
+async function start(){
+  if (started) return; started = true;
+  try {
+    const res = await fetch('assets/claw.glb');
+    if (!res.ok) throw new Error('model ' + res.status);
+    const bin = await res.arrayBuffer();
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    box.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    const key = new THREE.DirectionalLight(0xffffff, 1.2); key.position.set(1, 2, 1.5); scene.add(key);
+
+    const camera = new THREE.PerspectiveCamera(35, 1, 0.001, 50);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.autoRotate = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    controls.autoRotateSpeed = 1.2;
+    controls.addEventListener('start', () => { controls.autoRotate = false; });
+
+    const gltf = await new Promise((ok, fail) => new GLTFLoader().parse(bin, '', ok, fail));
+    const model = gltf.scene;
+    const bb = new THREE.Box3().setFromObject(model);
+    const c = bb.getCenter(new THREE.Vector3());
+    const r = bb.getSize(new THREE.Vector3()).length() / 2;
+    model.position.sub(c);
+    scene.add(model);
+    camera.position.set(r * 1.6, r * 1.3, r * 2.2);
+    controls.target.set(0, 0, 0);
+    controls.minDistance = r * 0.6; controls.maxDistance = r * 6;
+    controls.update();
+
+    function size(){
+      const w = box.clientWidth, h = box.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h; camera.updateProjectionMatrix();
+    }
+    size(); addEventListener('resize', size);
+    if ('ResizeObserver' in window) new ResizeObserver(size).observe(box);
+
+    renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+    box.classList.add('ready');
+    status.textContent = '';
+    window.__claw = { camera, controls };
+  } catch (e) {
+    console.error(e);
+    status.textContent = '3D model unavailable, showing a render';
+  }
+}
+
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { o.disconnect(); start(); } }, { rootMargin: '400px' }).observe(box);
+} else start();
+setTimeout(start, 3000);
+</script>
+</body>
+</html>
