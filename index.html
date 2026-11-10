@@ -56,9 +56,33 @@ a{color:var(--cobalt)}
 h1{font-family:var(--display);font-stretch:80%;font-weight:800;font-size:clamp(40px,6vw,72px);line-height:.98;letter-spacing:-.01em;margin:0 0 20px;text-wrap:balance}
 h1 em{font-style:normal;color:var(--heat)}
 .lede{font-size:18px;max-width:34em;margin:0 0 24px;color:var(--ink)}
-.hero figure{margin:0}
-.hero .plate{aspect-ratio:1/1;display:grid;place-items:center}
-.hero .plate img{width:88%}
+.does{display:grid;gap:10px;margin:0 0 22px;max-width:36em}
+.does>div{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;align-items:baseline}
+.does dt{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--heat)}
+.does dd{margin:0;font-size:15px}
+.contact{font-family:var(--mono);font-size:14px;margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.contact span{color:var(--muted)}
+.mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;aspect-ratio:1/1}
+.mosaic a{position:relative;overflow:hidden;border:1px solid var(--line);background:var(--plate);display:block;min-height:0}
+.mosaic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.mosaic a:hover img{transform:scale(1.04)}
+.mosaic .m1 img{object-fit:contain;padding:8%}
+.mosaic .m2 img{object-position:40% 50%}
+.mosaic .m3 img{object-position:62% 40%}
+.mosaic .m4 img{object-position:72% 50%}
+.mosaic span{position:absolute;left:8px;bottom:8px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;background:var(--ink);color:var(--paper);padding:3px 7px}
+.docs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+.docs a{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--cobalt);color:var(--cobalt);text-decoration:none;padding:6px 12px;font-size:14px;font-weight:500}
+.docs a::before{content:"↗";font-family:var(--mono)}
+.docs a:hover{background:var(--cobalt);color:var(--sheet)}
+.docs small{font-family:var(--mono);font-size:11px;font-weight:400;opacity:.8}
+.wide-lead{border:0;border-bottom:1px solid var(--line);border-radius:0}
+.figs.two{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:28px}
+.plate img{cursor:zoom-in}
+.lightbox{position:fixed;inset:0;z-index:50;background:rgba(8,12,15,.92);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));cursor:zoom-out}
+.lightbox img{max-width:100%;max-height:calc(100vh - 80px);object-fit:contain;background:#fff}
+.lightbox p{color:#d7dde1;font-size:14px;max-width:60em;text-align:center;margin:12px 0 0}
+.lightbox button{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px));background:#fff;color:#111;border:0;font:600 14px var(--body);padding:8px 14px;cursor:pointer}
 .tools{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
 .tools li{font-family:var(--mono);font-size:12px;background:var(--chip);padding:4px 10px;border-radius:3px}
 
@@ -153,7 +177,8 @@ ul.plain li{margin-bottom:6px}
 }
 @media (max-width:760px){
   .hero,.lead,.cols,.about{grid-template-columns:minmax(0,1fr)}
-  .hero .plate{aspect-ratio:auto}
+  .figs.two{grid-template-columns:minmax(0,1fr)}
+  .does>div{grid-template-columns:minmax(0,1fr);gap:2px}
   .glance{grid-template-columns:minmax(0,1fr)}
   .lead .plate{border-right:0;border-bottom:1px solid var(--line)}
   .sheet-head{grid-template-columns:minmax(0,1fr);padding:22px 18px}
@@ -181,24 +206,30 @@ html{scroll-behavior:smooth}
       <li><a href="#claw">Bird-of-prey gripper</a></li>
       <li><a href="#reviews">Stent design reviews</a></li>
       <li><a href="#marlo">Marlo (side project)</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="#about">Background &amp; contact</a></li>
     </ol>
   </nav>
 
   <main>
     <section id="top" class="hero">
       <div>
-        <p class="kicker">Engineering portfolio · 2025–26</p>
-        <h1>Getting therapeutic cells to <em>stay where they're needed.</em></h1>
-        <p class="lede">I'm a mechanical engineering graduate from Edinburgh. My dissertation asked whether a magnetised stent could catch and hold cells for cell therapy in the brain. I also like building physical things that move, like the robotic claw further down.</p>
-        <ul class="tools" aria-label="Tools">
-          <li>COMSOL Multiphysics</li><li>Python (NumPy/SciPy)</li><li>Onshape CAD</li><li>FEA</li><li>FDM printing · PLA/TPU</li><li>Arduino</li><li>EU/UK MDR</li>
-        </ul>
+        <p class="kicker">Engineering portfolio · BEng Mechanical Engineering, First Class · Edinburgh</p>
+        <h1>Sam Lukaitis. <em>Engineering for the body.</em></h1>
+        <p class="lede">I'm a mechanical engineer who wants to work on medical devices. I like problems that need a model and something built: simulating a stent in COMSOL, building a robotic claw from scratch, or writing software that puts regulation into code.</p>
+        <dl class="does">
+          <div><dt>Model</dt><dd>COMSOL FEA, Python analytical models and ODE solvers, cross-checked against each other</dd></div>
+          <div><dt>Build</dt><dd>Onshape CAD, FDM printing in PLA and TPU, Arduino motor control and sensing</dd></div>
+          <div><dt>Regulate</dt><dd>EU/UK MDR 2017/745, ISO standards, device risk registers</dd></div>
+          <div><dt>Ship</dt><dd>TypeScript and Python apps with LLM tool-calling, in front of real users</dd></div>
+        </dl>
+        <p class="contact"><a href="mailto:samlukaitis5@gmail.com">samlukaitis5@gmail.com</a> <span>·</span> <a href="https://github.com/SamLukaitis" target="_blank" rel="noopener">GitHub</a></p>
       </div>
-      <figure>
-        <div class="plate"><img src="assets/rings-dense.webp" alt="Heatmap of magnetic field gradient around a ring of stent struts, showing bright capture zones around each strut" width="757" height="720"></div>
-        <figcaption><b>FIG.</b> Where cells get caught. Field-gradient magnitude |∇|B|| around the 18-cell stent (V3) at 1.5 T, above a 100 T/m threshold. From my COMSOL model.</figcaption>
-      </figure>
+      <div class="mosaic" aria-label="Project highlights">
+        <a href="#stent" class="m1"><img src="assets/rings-dense.webp" alt="Simulated cell-capture zones around stent struts"><span>Magnetic stent</span></a>
+        <a href="#claw" class="m2"><img src="assets/render-grip.webp" alt="Render of the robotic claw gripping a cylinder"><span>Robotic gripper</span></a>
+        <a href="#reviews" class="m3"><img src="assets/essay-crosssection.webp" alt="Artery cross-sections across stent generations"><span>Stent reviews</span></a>
+        <a href="#marlo" class="m4"><img src="assets/marlo-cover.webp" alt="Marlo assistant slide"><span>Marlo</span></a>
+      </div>
     </section>
 
     <div class="glance">
@@ -211,7 +242,7 @@ html{scroll-behavior:smooth}
         <div><span class="num">Group build · 2025</span><h3>Bird-of-prey gripper</h3><p>Tendon-driven, 3D-printed claw with adjustable digit spread from 29° to 88°.</p></div>
       </a>
       <a href="#reviews">
-        <div class="thumb"><img src="assets/comsol-stent.webp" alt="" loading="lazy" style="object-position:50% 40%"></div>
+        <div class="thumb"><img src="assets/essay-crosssection.webp" alt="" loading="lazy" style="object-position:62% 40%"></div>
         <div><span class="num">Written work · 2026</span><h3>Stent design reviews</h3><p>Fifty years of coronary stents, read as a series of engineering fixes.</p></div>
       </a>
       <a href="#marlo">
@@ -227,6 +258,7 @@ html{scroll-behavior:smooth}
           <p class="kicker">Individual dissertation · MECE10008</p>
           <h2>A ferromagnetic cerebral stent that holds therapeutic cells in place</h2>
           <p class="sub">Cell therapies for neurological disease often fail because the cells don't reach the target, or don't stay there. I tested whether a stent, magnetised by an MRI scanner's 1.5 T field, could pull iron-oxide-labelled cells out of blood flow and keep them close to the vessel wall.</p>
+          <p class="docs"><a href="docs/Lukaitis_Dissertation_Magnetic_Cerebral_Stent.pdf" target="_blank" rel="noopener">Full dissertation <small>PDF · 7.8 MB · 51 pages</small></a></p>
         </div>
         <table class="tblock" aria-label="Project details">
           <tr><td>Date</td><td>Jan–Apr 2026</td></tr>
@@ -341,6 +373,7 @@ html{scroll-behavior:smooth}
           <p class="kicker">Group design-and-build project · Team of six</p>
           <h2>A bird-of-prey gripper with adjustable digit spread</h2>
           <p class="sub">Raptors change how far apart their toes sit depending on what they grab. We built a four-digit, tendon-driven claw with a vernier mechanism to set the angle between digits, then tested whether that angle changes how much a gripped object deforms.</p>
+          <p class="docs"><a href="docs/Bird_of_Prey_Gripper_Report.pdf" target="_blank" rel="noopener">Group report <small>PDF · 11 MB · 12 pages</small></a></p>
         </div>
         <table class="tblock" aria-label="Project details">
           <tr><td>Date</td><td>Nov 2025</td></tr>
@@ -458,6 +491,7 @@ html{scroll-behavior:smooth}
           <p class="kicker">Written work · Medical device design</p>
           <h2>How coronary stents evolved, one failure at a time</h2>
           <p class="sub">Two technical reviews: one on the mechanical design of drug-eluting stents, and one on how stent technology developed. Both argue that each new generation was engineered to fix the main way its predecessor failed.</p>
+          <p class="docs"><a href="docs/Lukaitis_Coronary_Stent_Evolution.pdf" target="_blank" rel="noopener">Design evolution essay <small>PDF · 0.3 MB</small></a><a href="docs/Lukaitis_Drug_Eluting_Stent_Review.pdf" target="_blank" rel="noopener">Drug-eluting stent review <small>PDF · 0.7 MB</small></a></p>
         </div>
         <table class="tblock" aria-label="Pieces">
           <tr><td>Piece 1</td><td>Mechanical review of DES design</td></tr>
@@ -465,6 +499,7 @@ html{scroll-behavior:smooth}
           <tr><td>Year</td><td>2026</td></tr>
         </table>
       </header>
+      <figure class="plate wide-lead"><img src="assets/essay-crosssection.webp" alt="Artery cross-sections: healthy, stenosed, bare-metal stent with restenosis, second-generation DES, and resorbing scaffold" loading="lazy"></figure>
       <div class="panel">
         <div class="timeline" role="list">
           <div role="listitem">
@@ -505,6 +540,10 @@ html{scroll-behavior:smooth}
             <h4>Why I wrote them</h4>
             <p>They gave me the device-design background behind my dissertation. A stent is a mechanical structure that also has to work with biology, and every design decision affects both.</p>
           </div>
+        </div>
+        <div class="figs two">
+          <figure><div class="plate"><img src="assets/essay-struts.webp" alt="Schematic comparing flow around thick and thin stent struts" loading="lazy"></div><figcaption><b>FIG.</b> Why thinner struts helped: thick struts create low wall-shear recirculation zones that drive tissue regrowth.</figcaption></figure>
+          <figure><div class="plate"><img src="assets/essay-failure.webp" alt="Bar chart of restenosis and target lesion failure rates across stent generations" loading="lazy"></div><figcaption><b>FIG.</b> Reported failure rates by generation, from 30–50% for balloon angioplasty to under 1% for the newest scaffolds.</figcaption></figure>
         </div>
       </div>
     </article>
@@ -564,9 +603,10 @@ html{scroll-behavior:smooth}
 
     <section id="about" class="about">
       <div>
-        <h2>About</h2>
-        <p>I'm Sam, a mechanical engineer from the University of Edinburgh. I'm most interested in the point where hardware meets biology: devices, tools and processes that make cell and gene therapies work outside the lab.</p>
-        <p>I like problems that need both a model and something built. If a simulation says one thing and a prototype says another, I want to find out why.</p>
+        <h2>Background &amp; contact</h2>
+        <p>I'm most interested in where hardware meets biology: the devices, tools and processes that make treatments like cell therapy work reliably outside the lab.</p>
+        <p>Outside my degree I worked as a partnerships manager at Social Ability, selling to hospitals and care homes, and as a contractor at Posidonia Environmental Services repairing a three-phase induction motor on a production line. I also played for the university basketball team and was an analyst on the student investment committee.</p>
+        <p class="contact"><a href="mailto:samlukaitis5@gmail.com">samlukaitis5@gmail.com</a> <span>·</span> <a href="https://github.com/SamLukaitis" target="_blank" rel="noopener">github.com/SamLukaitis</a></p>
       </div>
       <div>
         <table class="spec" aria-label="Summary">
@@ -613,6 +653,23 @@ html{scroll-behavior:smooth}
     Object.keys(map).forEach(function(id){var el=document.getElementById(id); if(el) io.observe(el)});
   }
   links[0].classList.add('on');
+
+  // Tap any figure to see it full size
+  var lastFocus=null;
+  function closeBox(){var b=document.querySelector('.lightbox'); if(b){b.remove(); document.body.style.overflow=''; if(lastFocus) lastFocus.focus();}}
+  document.addEventListener('click',function(e){
+    var img=e.target.closest('.plate img');
+    if(!img || e.target.closest('.lightbox')) return;
+    lastFocus=document.activeElement;
+    var fig=img.closest('figure'); var cap=fig && fig.querySelector('figcaption');
+    var box=document.createElement('div'); box.className='lightbox'; box.setAttribute('role','dialog'); box.setAttribute('aria-modal','true'); box.setAttribute('aria-label','Enlarged figure');
+    var btn=document.createElement('button'); btn.type='button'; btn.textContent='Close'; btn.addEventListener('click',closeBox);
+    var inner=document.createElement('div'); var big=document.createElement('img'); big.src=img.currentSrc||img.src; big.alt=img.alt; inner.appendChild(big);
+    if(cap){var p=document.createElement('p'); p.textContent=cap.textContent; inner.appendChild(p);}
+    box.appendChild(btn); box.appendChild(inner); box.addEventListener('click',function(ev){if(ev.target!==btn) closeBox()});
+    document.body.appendChild(box); document.body.style.overflow='hidden'; btn.focus();
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape') closeBox()});
 })();
 </script>
 <script type="module">
